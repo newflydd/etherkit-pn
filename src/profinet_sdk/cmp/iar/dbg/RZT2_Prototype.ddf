@@ -1,0 +1,47 @@
+
+;; Memory information ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; Used to define address zones within the ARM address space (Memory).
+;;
+;;   Name      may be almost anything
+;;   AdrSpace  must be Memory
+;;   StartAdr  start of memory block
+;;   EndAdr    end of memory block
+;;   AccType   type of access, read-only (R), read-write (RW) or SFR (W)
+
+;;   For HW evaluation  2020/04/07
+
+[Memory]
+;;         Name             AdrSpace    StartAdr    EndAdr      AccType   Width
+Memory =  ATCM1            Memory      0x00000000  0x0007FFFF  RW 
+Memory =  BTCM1            Memory      0x00100000  0x0010FFFF  RW 
+Memory =  SystemRAM        Memory      0x10000000  0x1017FFFF  RW
+Memory =  BootROM          Memory      0x11000000  0x1100FFFF  R 
+Memory =  ATCM2            Memory      0x20000000  0x2007FFFF  RW 
+Memory =  BTCM2            Memory      0x20100000  0x2010FFFF  RW 
+Memory =  SystemRamMirror  Memory      0x30000000  0x3017FFFF  RW
+Memory =  XSPI0Mirror       Memory      0x40000000  0x47FFFFFF  RW 
+Memory =  XSPI1Mirror       Memory      0x48000000  0x4FFFFFFF  RW 
+Memory =  CSMirror         Memory      0x50000000  0x5FFFFFFF  RW 
+Memory =  XSPI0            Memory      0x60000000  0x67FFFFFF  RW
+Memory =  XSPI1            Memory      0x68000000  0x6FFFFFFF  RW
+Memory =  CS               Memory      0x70000000  0x7FFFFFFF  RW 
+;;
+Memory =  SYSTEM0          Memory      0x80280000  0x80281a04  RW 
+Memory =  GMAC             Memory      0x80100000  0x8010105B  RW 
+Memory =  ETHSW            Memory      0x80120000  0x80123F3F  RW 
+Memory =  ETH_REG          Memory      0x80110000  0x80110B23  RW 
+;;
+Memory =  NS_Peri         Memory      0x80000000  0x80FFFFFF  W  
+Memory =  S_Peri          Memory      0x81000000  0x81FFFFFF  W  
+Memory =  LLPP0_Peri       Memory      0x90000000  0x901FFFFF  W  
+Memory =  GIC0             Memory      0x94000000  0x941FFFFF  RW 
+Memory =  GIC1             Memory      0x9C000000  0x9C1FFFFF  RW 
+Memory =  ENCIF            Memory      0xA0000000  0xA0FFFFFF  RW
+Memory =  DebugPrivate     Memory      0xC0000000  0xC0FFFFFF  W  
+
+TrustedRanges = true
+UseSfrFilter = true
+
+[SfrInclude]
+#include "RZT2M_beta5.svd"

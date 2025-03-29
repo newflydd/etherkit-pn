@@ -1,0 +1,351 @@
+__var val;
+
+__param WRAPCFG   = 0x80220000;
+__param BMCFGCH0  = 0x80220008;
+__param CMCFG0CS0 = 0x80220010;
+__param CMCFG1CS0 = 0x80220014;
+__param CMCFG2CS0 = 0x80220018;
+__param LIOCFGCS0 = 0x80220050;
+__param LIOCFGCS1 = 0x80220054;
+__param BMCTL0    = 0x80220060;
+__param BMCTL1    = 0x80220064;
+
+__param CDCTL0    = 0x80220070;
+__param CDTBUF0   = 0x80220080;
+__param CDABUF0   = 0x80220084;
+__param CDD0BUF0  = 0x80220088;
+__param CDD1BUF0  = 0x8022008c;
+
+__param INTS      = 0x80220190;
+__param INTC      = 0x80220194;
+
+__param BTCM_ADDR = 0x00100000;
+__param BTCM_SIZE = 0x00010000;
+
+__param ATCM_ADDR = 0x00000000;
+__param ATCM_SIZE = 0x00080000;
+
+__param PRCRS     = 0x81281A00;
+__param PRCRN     = 0x80281A10;
+
+__param CPU0WAIT  = 0x81281910;
+__param SCKCR2    = 0x81280004;
+
+__param SWRCPU1    = 0x81280230;
+
+//// Clock control
+__param SCKCR     = 0x80280000;
+/*__param SCKCR2    = 0x81280004;*/
+
+//// Module stop control
+__param MSTPCRA    = 0x80280300;
+__param MSTPCRD    = 0x8028030c;
+
+
+
+//// Bus state controller (BSC)
+__param CS3BCR    = 0x80210010;
+__param CS3WCR_1  = 0x80210034;
+__param SDCR      = 0x8021004c;
+__param RTCSR     = 0x80210050;
+__param RTCNT     = 0x80210054;
+__param RTCOR     = 0x80210058;
+__param TOSTR     = 0x80210080;
+
+
+execUserPreload()
+{
+	__message "Executing execUserPreload() function\n";
+	
+	__bsc_sdram_setup();
+//	init_xSPI();
+	
+	enable_BTCM();
+	clear_BTCM();
+	clear_ATCM();
+	
+	//reg_write_protect_release();
+	//CR52_800MHz();
+    //CPU1_enable();
+}
+
+execUserPreReset()
+{
+	__message "Executing execUserPreReset() function\n";
+}
+
+execUserReset()
+{
+	__message "Executing execUserReset() function\n";
+//	__hwReset(0);
+
+	enable_BTCM();
+//	init_xSPI();
+}
+
+enable_BTCM()
+{
+	__message "Enable BTCM\n";
+
+	val = __jtagCP15ReadReg(9, 1, 0, 1);
+	val |= BTCM_ADDR;		// Base address
+	val |= 1<<1;			// Enable at EL2
+	val |= 1<<0;			// Enable at EL1 and EL0
+	__jtagCP15WriteReg(9, 1, 0, 1, val);
+}
+
+clear_BTCM()
+{
+	__message "Clear BTCM\n";
+
+	__fillMemory32(0, BTCM_ADDR, "Memory", BTCM_SIZE/4, "Copy");
+}
+
+clear_ATCM()
+{
+	__message "Clear ATCM\n";
+
+	//__fillMemory64(0, ATCM_ADDR, "Memory", ATCM_SIZE/4, "Copy");
+	__probeCmd("s64 0 L 0x80000 = 0"); // s64 <addr> L <size> = <value>
+}
+
+reg_write_protect_release()
+{
+	__writeMemory32(0x0000A51F, PRCRS, "Memory");
+	__writeMemory32(0x0000A51F, PRCRN, "Memory");
+}
+
+CR52_800MHz()
+{
+	__writeMemory32(0x00000010, SCKCR2, "Memory");
+}
+CPU1_enable()
+{
+	__writeMemory32(0x00000000, SWRCPU1, "Memory");
+}
+init_xSPI()
+{
+	__message "Initialize xSPI\n";
+
+	// Reset sequence
+	do {
+		val = __readMemory32(CDCTL0, "Memory");	
+	} while (0x00000001 == (val & 0x00000001));
+	__writeMemory32(0x66008001, CDTBUF0, "Memory");  // Command: Reset Enable(0x66), Write, Command size: 1byte
+	__writeMemory32(0x00000001, CDCTL0, "Memory");
+	do {
+		val = __readMemory32(INTS, "Memory");	
+	} while (0x00000000 == (val & 0x00000001));
+	__writeMemory32(0x00000001, INTC, "Memory");
+
+	do {
+		val = __readMemory32(CDCTL0, "Memory");	
+	} while (0x00000001 == (val & 0x00000001));
+	__writeMemory32(0x99008001, CDTBUF0, "Memory");  // Command: Reset(0x99), Write, Command size: 1byte
+	__writeMemory32(0x00000001, CDCTL0, "Memory");
+	do {
+		val = __readMemory32(INTS, "Memory");	
+	} while (0x00000000 == (val & 0x00000001));
+	__writeMemory32(0x00000001, INTC, "Memory");
+
+	// Wait for recovery from reset (max.12ms in case MX25R6435)
+	__delay(12);
+
+	// Initialize xSPI to memory mapping mode
+//	__writeMemory32(0x00000000, LIOCFGCS0, "Memory"); // 1S-1S-1S protocol
+	__writeMemory32(0x00000090, LIOCFGCS0, "Memory"); // 1S-4S-4S protocol
+	__writeMemory32(0x00000000, WRAPCFG, "Memory");
+	__writeMemory32(0x00080008, CMCFG0CS0, "Memory"); // Address replace enable(?), address size 3bytes, normal format
+//	__writeMemory32(0x00000300, CMCFG1CS0, "Memory"); // read command: normal read, latency
+	__writeMemory32(0x0006eb00, CMCFG1CS0, "Memory"); // read command: 4 x I/O read, latency
+	__writeMemory32(0x00003800, CMCFG2CS0, "Memory"); // write command: Quad page program, latency
+//	__writeMemory32(0x000000ff, BMCTL0, "Memory"); // All AHB channel have access read/write
+	__writeMemory32(0x00000055, BMCTL0, "Memory"); // All AHB channel have access read
+//	__writeMemory32(0x00010001, BMCFGCH0, "Memory"); // prefetch enabled, incremental address up to 4byte, return response after issuing transaction to xSPI bus
+	__writeMemory32(0x00000001, BMCFGCH0, "Memory"); // prefetch disabled, incremental address up to 4byte, return response after issuing transaction to xSPI bus
+}
+
+
+reg_write_protect_unlock()
+{
+	__writeMemory32(0x0000A50F, PRCRS, "Memory");
+	__writeMemory32(0x0000A50F, PRCRN, "Memory");
+}
+
+reg_write_protect_lock()
+{
+	__writeMemory32(0x0000A500, PRCRS, "Memory");
+	__writeMemory32(0x0000A500, PRCRN, "Memory");
+}
+
+
+
+__bsc_sdram_setup()
+{
+	__message "Setup SDRAM interface\n";
+
+	reg_write_protect_unlock();
+
+	bsc_sdram_pinmux();
+
+	// Configure clock frequency
+	val = __readMemory32(SCKCR, "Memory");
+	val &= ~(7<<16);
+	val |=  (1<<16);	// CKIO clock: 66.7MHz
+	__writeMemory32(val, SCKCR, "Memory");
+
+	// Enable BSC module
+	val = __readMemory32(MSTPCRA, "Memory");
+	val &= ~(1<<0);
+	__writeMemory32(val, MSTPCRA, "Memory");
+	val = __readMemory32(MSTPCRA, "Memory");        // dummy read: step1
+
+	// Enable CKIO module
+	val = __readMemory32(MSTPCRD, "Memory");
+	val &= ~(1<<11);
+	__writeMemory32(val, MSTPCRD, "Memory");
+	val = __readMemory32(MSTPCRD, "Memory");        // dummy read: step1
+
+	val = __readMemory32(CS3BCR, "Memory");        // dummy read: step2
+
+
+	reg_write_protect_lock();
+
+	// Configure BSC registers. Target SDRAM: W9825G6KH-6
+	val = ( 2 <<  9)	// BSZ: data bus witdh: 16-bits
+	 	| ( 1 << 11)	// Reserved
+	 	| ( 4 << 12)	// TYPE: SDRAM
+	 	| ( 0 << 16)	// IWRRS: Idle State Insertion between Read-Read Cycles in the Same CS Space
+	 	| ( 0 << 19)	// IWRRD: Idle State Insertion between Read-Read Cycles in Different CS Spaces
+	 	| ( 0 << 22)	// IWRWS: Idle State Insertion between Read-Write Cycles in the Same CS Space
+	 	| ( 0 << 25)	// IWRWD: Idle State Insertion between Read-Write Cycles in Different CS Spaces
+	 	| ( 0 << 28);	// IWW: Idle Cycles between Write-Read Cycles and Write-Write Cycles
+	__writeMemory32(val, CS3BCR, "Memory");
+	val = ( 2 <<  0)	// WTRC: Number of Idle states frmo REF Command/Self-refresh relase to ACTV/REF/MRS command
+	 	| ( 2 <<  3)	// TRWL: Number of Auto-precharge startup Wait Cycle
+	 	| ( 1 <<  7)	// A3CL: CAS Latency: 2
+//	 	| ( 2 <<  7)	// A3CL: CAS Latency: 3
+	 	| ( 1 << 10)	// WTRCD: Number of Waits between ACTV command and READ/WRIT command
+	 	| ( 1 << 13);	// WTRP: Number of Auto-precharge completion wait states
+	__writeMemory32(val, CS3WCR_1, "Memory");
+	__writeMemory32(0x00000811, SDCR, "Memory");		// auto-refresh, auto-precharge mode, Col 9-bits, Row 13-bits
+
+	__writeMemory32(0xa55a001d, RTCOR, "Memory");       // 29 counts
+	__writeMemory32(0xa55a0010, RTCSR, "Memory");       // clock = CKIO/16
+
+	__delay(1);		// pause time 200us
+
+	// Set mode register of SDRAM. needs wait for 2 SDRAM clock after set.
+	__writeMemory16(0x0000, 0x80212040, "Memory");   // Burst length=1, Sequential, CL=2, Burst read and burst write
+//	__writeMemory16(0x0000, 0x80212060, "Memory");   // Burst length=1, Sequential, CL=3, Burst read and burst write
+}
+
+
+
+bsc_sdram_pinmux()
+{
+	// port Pin setup
+	// ------|----------|-----|-----------------
+	// Port	 | Function	| PFC |	Note
+	// ------|----------|-----|-----------------
+	// P00_7 | RAS#	    |  1  |
+	// P01_0 | CAS#	    |  2  |
+	// P01_1 | CKE      |  2  |
+	// P03_4 | WR#      |  1  |
+	// P04_1 | CKIO	    |  0  | Default: 50MHz
+	// P14_5 | CS3#	    |  1  | 
+	// P23_1 | DQMLL    |  2  |
+	// P23_2 | DQMLU    |  2  |
+	// ------|----------|-----|-----------------
+
+	// port Pin setup
+	// P00_7 PM007=3, PMC007=1, PFC007=1, ASELP007=1
+	__writeMemory8(0x80, 0x81030C00, "Memory");        // ASELP00
+	__writeMemory32(0x10000000, 0x800A0600, "Memory"); // PFC00
+	__writeMemory8(0x80, 0x800A0400, "Memory");        // PMC00
+	__writeMemory16(0xC000, 0x800A0200, "Memory");     // PM00
+
+
+	// P01_0 PM010=3, PMC010=1, PFC010=2, ASELP010=1
+	// P01_1 PM011=3, PMC011=1, PFC011=2, ASELP011=1
+	__writeMemory8(0x03, 0x81030C01, "Memory");        // ASELP01
+	__writeMemory32(0x22000022, 0x800A0604, "Memory"); // PFC01
+	__writeMemory8(0xC3, 0x800A0401, "Memory");        // PMC01
+	__writeMemory16(0x000F, 0x800A0202, "Memory");     // PM01
+
+	// P02_3 PM023=3, PMC023=1, PFC023=2, ASELP023=1
+	__writeMemory8(0x08, 0x81030C02, "Memory");        // ASELP02
+	__writeMemory32(0x00102213, 0x800A0608, "Memory"); // PFC02
+	__writeMemory8(0xFF, 0x800A0402, "Memory");        // PMC02
+	__writeMemory16(0x00C4, 0x800A0204, "Memory");     // PM02
+
+	// P03_0 PM030=3, PMC030=1, PFC030=2, ASELP030=1
+	// P03_2 PM032=3, PMC032=1, PFC032=2, ASELP032=1
+	// P03_4 PM034=3, PMC034=1, PFC034=1, ASELP034=1
+	// P03_5 PM035=3, PMC035=1, PFC035=2, ASELP035=1
+	// P03_6 PM036=3, PMC036=1, PFC036=3, ASELP036=1
+	// P03_7 PM037=3, PMC037=1, PFC037=3, ASELP037=1
+	__writeMemory8(0xF5, 0x81030C03, "Memory");        // ASELP03
+	__writeMemory32(0x33210202, 0x800A060C, "Memory"); // PFC03
+	__writeMemory8(0xF5, 0x800A0403, "Memory");        // PMC03
+	__writeMemory16(0xFF33, 0x800A0206, "Memory");     // PM03
+
+	// P04_0 PM040=3, PMC040=1, PFC040=1, ASELP040=1
+	// P04_1 PM041=3, PMC041=1, PFC041=0, ASELP041=1
+	// P04_4 PM044=3, PMC044=1, PFC044=2, ASELP04=1
+	// P04_5 PM045=3, PMC045=1, PFC045=0, ASELP045=1
+	// P04_6 PM046=3, PMC046=1, PFC046=1, ASELP046=1
+	// P04_7 PM047=3, PMC047=1, PFC047=1, ASELP047=1
+	__writeMemory8(0xF3, 0x81030C04, "Memory");        // ASELP04
+	__writeMemory32(0x11020001, 0x800A0610, "Memory"); // PFC04
+	__writeMemory8(0xFF, 0x800A0404, "Memory");        // PMC04
+	__writeMemory16(0xFF0F, 0x800A0208, "Memory");     // PM04
+
+	// P05_0 PM050=3, PMC050=1, PFC050=2, ASELP050=1
+	// P05_1 PM051=3, PMC051=1, PFC051=2, ASELP051=1
+	// P05_2 PM052=3, PMC052=1, PFC052=2, ASELP052=1
+	// P05_3 PM053=3, PMC053=1, PFC053=2, ASELP053=1
+	__writeMemory8(0x0F, 0x81030C05, "Memory");        // ASELP05
+	__writeMemory32(0x00002222, 0x800A0614, "Memory"); // PFC05
+	__writeMemory8(0x0F, 0x800A0405, "Memory");        // PMC05
+	__writeMemory16(0x00FF, 0x800A020A, "Memory");     // PM05
+
+	// P14_5 PM145=3, PMC145=1, PFC145=1, ASELP145=1
+	__writeMemory8(0x20, 0x81030C0E, "Memory");        // ASELP14
+	__writeMemory32(0x00100000, 0x800A0638, "Memory"); // PFC14
+	__writeMemory8(0x20, 0x800A040E, "Memory");        // PMC14
+	__writeMemory16(0x0C00, 0x800A021C, "Memory");     // PM14
+
+	// P21_1 PM211=3, PMC211=1, PFC211=1, ASELP211=1
+	// P21_2 PM212=3, PMC212=1, PFC212=1, ASELP212=1
+	// P21_3 PM213=3, PMC213=1, PFC213=1, ASELP213=1
+	// P21_4 PM214=3, PMC214=1, PFC214=1, ASELP214=1
+	// P21_5 PM215=3, PMC215=1, PFC215=2, ASELP215=1
+	// P21_6 PM216=3, PMC216=1, PFC216=2, ASELP216=1
+	// P21_7 PM217=3, PMC217=1, PFC217=2, ASELP217=1
+	__writeMemory8(0xFE, 0x81030C15, "Memory");        // ASELP21
+	__writeMemory32(0x22211110, 0x800A0654, "Memory"); // PFC21
+	__writeMemory8(0xFE, 0x800A0415, "Memory");        // PMC21
+	__writeMemory16(0xFFFC, 0x800A022A, "Memory");     // PM21
+
+	// P22_0 PM220=3, PMC220=1, PFC220=2, ASELP220=1
+	// P22_1 PM221=3, PMC221=1, PFC221=1, ASELP221=1
+	// P22_2 PM222=3, PMC222=1, PFC222=2, ASELP222=1
+	// P22_3 PM223=3, PMC223=1, PFC223=0, ASELP223=1
+	// P22_4 PM224=3, PMC224=1, PFC224=0, ASELP224=1
+	// P22_5 PM225=3, PMC225=1, PFC225=0, ASELP225=1
+	// P22_6 PM226=3, PMC226=1, PFC226=0, ASELP226=1
+	// P22_7 PM227=3, PMC227=1, PFC227=0, ASELP227=1
+	__writeMemory8(0xFF, 0x81030C16, "Memory");        // ASELP22
+	__writeMemory32(0x00000212, 0x800A0658, "Memory"); // PFC22
+	__writeMemory8(0xFF, 0x800A0416, "Memory");        // PMC22
+	__writeMemory16(0xFFFF, 0x800A022C, "Memory");     // PM22
+
+	// P23_0 PM230=3, PMC230=1, PFC230=1, ASELP230=1
+	// P23_1 PM231=3, PMC231=1, PFC231=2, ASELP231=1
+	// P23_2 PM232=3, PMC232=1, PFC232=2, ASELP232=1
+	__writeMemory8(0x07, 0x81030C17, "Memory");        // ASELP23
+	__writeMemory32(0x00000221, 0x800A065C, "Memory"); // PFC23
+	__writeMemory8(0x07, 0x800A0417, "Memory");        // PMC23
+	__writeMemory16(0x003F, 0x800A022E, "Memory");     // PM23
+}

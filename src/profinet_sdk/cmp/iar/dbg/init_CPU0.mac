@@ -1,0 +1,144 @@
+__var val;
+
+__param WRAPCFG   = 0x80220000;
+__param BMCFGCH0  = 0x80220008;
+__param CMCFG0CS0 = 0x80220010;
+__param CMCFG1CS0 = 0x80220014;
+__param CMCFG2CS0 = 0x80220018;
+__param LIOCFGCS0 = 0x80220050;
+__param LIOCFGCS1 = 0x80220054;
+__param BMCTL0    = 0x80220060;
+__param BMCTL1    = 0x80220064;
+
+__param CDCTL0    = 0x80220070;
+__param CDTBUF0   = 0x80220080;
+__param CDABUF0   = 0x80220084;
+__param CDD0BUF0  = 0x80220088;
+__param CDD1BUF0  = 0x8022008c;
+
+__param INTS      = 0x80220190;
+__param INTC      = 0x80220194;
+
+__param BTCM_ADDR = 0x00100000;
+__param BTCM_SIZE = 0x00010000;
+
+__param ATCM_ADDR = 0x00000000;
+__param ATCM_SIZE = 0x00080000;
+
+__param PRCRS     = 0x81281A00;
+__param PRCRN     = 0x80281A10;
+
+__param CPU0WAIT  = 0x81281910;
+__param SCKCR2    = 0x81280004;
+
+__param SWRCPU1    = 0x81280230;
+
+
+execUserPreload()
+{
+	__message "Executing execUserPreload() function\n";
+
+	// enable_BTCM();
+	clear_BTCM();
+	clear_ATCM();
+	// CR52_800MHz();
+	
+	reg_write_protect_release();
+    CPU1_enable();
+}
+
+execUserPreReset()
+{
+	__message "Executing execUserPreReset() function\n";
+}
+
+execUserReset()
+{
+	__message "Executing execUserReset() function\n";
+//	__hwReset(0);
+
+	enable_BTCM();
+//	init_xSPI();
+}
+
+enable_BTCM()
+{
+	__message "Enable BTCM\n";
+
+	val = __jtagCP15ReadReg(9, 1, 0, 1);
+	val |= BTCM_ADDR;		// Base address
+	val |= 1<<1;			// Enable at EL2
+	val |= 1<<0;			// Enable at EL1 and EL0
+	__jtagCP15WriteReg(9, 1, 0, 1, val);
+}
+
+clear_BTCM()
+{
+	__message "Clear BTCM\n";
+
+	__fillMemory32(0, BTCM_ADDR, "Memory", BTCM_SIZE/4, "Copy");
+}
+
+clear_ATCM()
+{
+	__message "Clear ATCM\n";
+
+	__fillMemory32(0, ATCM_ADDR, "Memory", ATCM_SIZE/4, "Copy");
+	//__probeCmd("s64 0 L 0x80000 = 0"); // s64 <addr> L <size> = <value>
+}
+
+reg_write_protect_release()
+{
+	__writeMemory32(0x0000A51F, PRCRS, "Memory");
+	__writeMemory32(0x0000A51F, PRCRN, "Memory");
+}
+
+CR52_800MHz()
+{
+	__writeMemory32(0x00000010, SCKCR2, "Memory");
+}
+CPU1_enable()
+{
+	__writeMemory32(0x00000000, SWRCPU1, "Memory");
+}
+init_xSPI()
+{
+	__message "Initialize xSPI\n";
+
+	// Reset sequence
+	do {
+		val = __readMemory32(CDCTL0, "Memory");	
+	} while (0x00000001 == (val & 0x00000001));
+	__writeMemory32(0x66008001, CDTBUF0, "Memory");  // Command: Reset Enable(0x66), Write, Command size: 1byte
+	__writeMemory32(0x00000001, CDCTL0, "Memory");
+	do {
+		val = __readMemory32(INTS, "Memory");	
+	} while (0x00000000 == (val & 0x00000001));
+	__writeMemory32(0x00000001, INTC, "Memory");
+
+	do {
+		val = __readMemory32(CDCTL0, "Memory");	
+	} while (0x00000001 == (val & 0x00000001));
+	__writeMemory32(0x99008001, CDTBUF0, "Memory");  // Command: Reset(0x99), Write, Command size: 1byte
+	__writeMemory32(0x00000001, CDCTL0, "Memory");
+	do {
+		val = __readMemory32(INTS, "Memory");	
+	} while (0x00000000 == (val & 0x00000001));
+	__writeMemory32(0x00000001, INTC, "Memory");
+
+	// Wait for recovery from reset (max.12ms in case MX25R6435)
+	__delay(12);
+
+	// Initialize xSPI to memory mapping mode
+//	__writeMemory32(0x00000000, LIOCFGCS0, "Memory"); // 1S-1S-1S protocol
+	__writeMemory32(0x00000090, LIOCFGCS0, "Memory"); // 1S-4S-4S protocol
+	__writeMemory32(0x00000000, WRAPCFG, "Memory");
+	__writeMemory32(0x00080008, CMCFG0CS0, "Memory"); // Address replace enable(?), address size 3bytes, normal format
+//	__writeMemory32(0x00000300, CMCFG1CS0, "Memory"); // read command: normal read, latency
+	__writeMemory32(0x0006eb00, CMCFG1CS0, "Memory"); // read command: 4 x I/O read, latency
+	__writeMemory32(0x00003800, CMCFG2CS0, "Memory"); // write command: Quad page program, latency
+//	__writeMemory32(0x000000ff, BMCTL0, "Memory"); // All AHB channel have access read/write
+	__writeMemory32(0x00000055, BMCTL0, "Memory"); // All AHB channel have access read
+//	__writeMemory32(0x00010001, BMCFGCH0, "Memory"); // prefetch enabled, incremental address up to 4byte, return response after issuing transaction to xSPI bus
+	__writeMemory32(0x00000001, BMCFGCH0, "Memory"); // prefetch disabled, incremental address up to 4byte, return response after issuing transaction to xSPI bus
+}

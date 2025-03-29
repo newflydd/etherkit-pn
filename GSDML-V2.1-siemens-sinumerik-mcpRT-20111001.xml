@@ -1,0 +1,923 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+        PROFINET GSD for Siemens SINUMERIK MCPs / MPPs
+                GSD V2.1 for temporary use with legacy controllers: 
+                         - RT only
+                         - single submodule per module
+                         - single API
+        Author: Gerhard Scheithauer 
+        State: Baselined
+        History:
+                20070529: First version
+                20070716: Included all actual known MCP components
+                20080122: MCP 429 PN, MCP 416 PN, OP 015, MPP 483 PN included. 
+                20080401: Namechange IL to MPP 483 PN C-200
+                20080601: PN-Certification, P-Dev included, (V19.05.2008)
+                20080701: Change to GSD version V2.1 (internal 080810)
+                20111001: Order Number changed to support MPP's (6FC5303-0AFXX-XAAX to 6FC5303-XAFXX-XXXX)
+-->
+<ISO15745Profile xmlns="http://www.profibus.com/GSDML/2003/11/DeviceProfile" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.profibus.com/GSDML/2003/11/DeviceProfile ..\XSD\GSDML-DeviceProfile-v2.1.xsd">
+  <!-- ProfileHeader Definition as defined in ISO15745-1. Please do not change the content. -->
+  <ProfileHeader>
+    <ProfileIdentification>PROFINET Device Profile</ProfileIdentification>
+    <ProfileRevision>1.00</ProfileRevision>
+    <ProfileName>Device Profile for PROFINET Devices</ProfileName>
+    <ProfileSource>PROFIBUS Nutzerorganisation e. V. (PNO)</ProfileSource>
+    <ProfileClassID>Device</ProfileClassID>
+    <ISO15745Reference>
+      <ISO15745Part>4</ISO15745Part>
+      <ISO15745Edition>1</ISO15745Edition>
+      <ProfileTechnology>GSDML</ProfileTechnology>
+    </ISO15745Reference>
+  </ProfileHeader>
+  <ProfileBody>
+    <DeviceIdentity VendorID="0x002A" DeviceID="0x0308">
+      <InfoText TextId="IDT_FamilyDescription" />
+      <VendorName Value="Siemens AG" />
+    </DeviceIdentity>
+    <DeviceFunction>
+      <Family MainFamily="I/O" ProductFamily="SINUMERIK" />
+    </DeviceFunction>
+    <ApplicationProcess>
+      <!-- ============================================================================================ -->
+      <DeviceAccessPointList>
+        <DeviceAccessPointItem ID="IDD_1" PhysicalSlots="0..2" ModuleIdentNumber="0x00020000" MinDeviceInterval="32" DNS_CompatibleName="mcp-pn" FixedInSlots="0" ObjectUUID_LocalIndex="0" ImplementationType="ERTEC200" ExtendedAddressAssignmentSupported="true">
+          <ModuleInfo>
+            <Name TextId="IDT_MOD_NAME_DAP1" />
+            <InfoText TextId="IDT_INFO_DAP1" />
+            <Family MainFamily="I/O" ProductFamily="SINUMERIK" />
+            <VendorName Value="Siemens AG" />
+            <OrderNumber Value="6FC5303-XAFXX-XXXX" />
+            <HardwareRelease Value="01" />
+            <SoftwareRelease Value="V2.2" />
+          </ModuleInfo>
+          <SubslotList>
+            <SubslotItem SubslotNumber="32768" TextId="IDT_SS_Interface" />
+            <SubslotItem SubslotNumber="32769" TextId="IDT_SS_Port1" />
+            <SubslotItem SubslotNumber="32770" TextId="IDT_SS_Port2" />
+          </SubslotList>
+          <IOConfigData MaxInputLength="30" MaxOutputLength="30" MaxDataLength="60" />
+          <UseableModules>
+            <!-- list all modules from ModuleList here -->
+            <ModuleItemRef ModuleItemTarget="IDM_1" AllowedInSlots="1..1" />
+            <ModuleItemRef ModuleItemTarget="IDM_2" AllowedInSlots="1..1" />
+            <ModuleItemRef ModuleItemTarget="IDM_3" AllowedInSlots="1..1" />
+            <ModuleItemRef ModuleItemTarget="IDM_4" AllowedInSlots="1..1" />
+            <ModuleItemRef ModuleItemTarget="IDM_5" AllowedInSlots="1..1" />
+            <ModuleItemRef ModuleItemTarget="IDM_6" AllowedInSlots="1..1" />
+            <ModuleItemRef ModuleItemTarget="IDM_7" AllowedInSlots="1..1" />
+            <ModuleItemRef ModuleItemTarget="IDM_8" AllowedInSlots="1..1" />
+            <ModuleItemRef ModuleItemTarget="IDM_9" AllowedInSlots="1..1" />
+            <ModuleItemRef ModuleItemTarget="IDM_10" AllowedInSlots="1..1" />
+            <ModuleItemRef ModuleItemTarget="IDM_11" AllowedInSlots="1..1" />
+            <ModuleItemRef ModuleItemTarget="IDM_128" AllowedInSlots="2..2" />
+          </UseableModules>
+          <VirtualSubmoduleList>
+            <VirtualSubmoduleItem ID="IDS_D1" SubmoduleIdentNumber="0x00000002">
+              <IOData IOPS_Length="1" IOCS_Length="1" />
+            </VirtualSubmoduleItem>
+          </VirtualSubmoduleList>
+          <SystemDefinedSubmoduleList>
+            <InterfaceSubmoduleItem IsochroneModeSupported="false" SupportedProtocols="SNMP;LLDP" SupportedMibs="MIB2" SupportedRT_Class="Class1" SubslotNumber="32768" TextId="IDT_Interface1" SubmoduleIdentNumber="0x00000003"></InterfaceSubmoduleItem>
+            <PortSubmoduleItem SubslotNumber="32769" MAUType="100BASETXFD" TextId="IDT_Port1" SubmoduleIdentNumber="0x00000004" />
+            <PortSubmoduleItem SubslotNumber="32770" MAUType="100BASETXFD" TextId="IDT_Port2" SubmoduleIdentNumber="0x00000004" />
+          </SystemDefinedSubmoduleList>
+          <Graphics>
+            <GraphicItemRef Type="DeviceSymbol" GraphicItemTarget="IDGR_DEVICE" />
+          </Graphics>
+        </DeviceAccessPointItem>
+      </DeviceAccessPointList>
+      <!-- ============================================================================================ -->
+      <ModuleList>
+        <!--  Universal      I/Os 14/10 + Option 2/2   = 16/12 Byte -->
+        <ModuleItem ID="IDM_1" ModuleIdentNumber="0x0000F001">
+          <ModuleInfo>
+            <Name TextId="IDT_MOD_NAME_TEL1" />
+            <InfoText TextId="IDT_MOD_INFO_TEL1" />
+          </ModuleInfo>
+          <VirtualSubmoduleList>
+            <VirtualSubmoduleItem ID="IDS_1" SubmoduleIdentNumber="0x00000001">
+              <IOData IOPS_Length="1" IOCS_Length="1">
+                <Input Consistency="Item consistency">
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                </Input>
+                <Output Consistency="Item consistency">
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                </Output>
+              </IOData>
+              <ModuleInfo>
+                <Name TextId="IDT_SM_NAME_TEL1" />
+                <InfoText TextId="IDT_SM_INFO_TEL1" />
+              </ModuleInfo>
+            </VirtualSubmoduleItem>
+          </VirtualSubmoduleList>
+        </ModuleItem>
+        <!-- MCP 310C PN  -->
+        <ModuleItem ID="IDM_2" ModuleIdentNumber="0x0000F002">
+          <ModuleInfo>
+            <Name TextId="IDT_MOD_NAME_TEL2" />
+            <InfoText TextId="IDT_MOD_INFO_TEL2" />
+          </ModuleInfo>
+          <VirtualSubmoduleList>
+            <VirtualSubmoduleItem ID="IDS_2" SubmoduleIdentNumber="0x00000002">
+              <IOData IOPS_Length="1" IOCS_Length="1">
+                <Input Consistency="Item consistency">
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                </Input>
+                <Output Consistency="Item consistency">
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                </Output>
+              </IOData>
+              <ModuleInfo>
+                <Name TextId="IDT_SM_NAME_TEL2" />
+                <InfoText TextId="IDT_SM_INFO_TEL2" />
+              </ModuleInfo>
+            </VirtualSubmoduleItem>
+          </VirtualSubmoduleList>
+        </ModuleItem>
+        <!-- MCP 310 PN -->
+        <ModuleItem ID="IDM_3" ModuleIdentNumber="0x0000F003">
+          <ModuleInfo>
+            <Name TextId="IDT_MOD_NAME_TEL3" />
+            <InfoText TextId="IDT_MOD_INFO_TEL3" />
+          </ModuleInfo>
+          <VirtualSubmoduleList>
+            <VirtualSubmoduleItem ID="IDS_3" SubmoduleIdentNumber="0x00000003">
+              <IOData IOPS_Length="1" IOCS_Length="1">
+                <Input Consistency="Item consistency">
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                </Input>
+                <Output Consistency="Item consistency">
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                </Output>
+              </IOData>
+              <ModuleInfo>
+                <Name TextId="IDT_SM_NAME_TEL3" />
+                <InfoText TextId="IDT_SM_INFO_TEL3" />
+              </ModuleInfo>
+            </VirtualSubmoduleItem>
+          </VirtualSubmoduleList>
+        </ModuleItem>
+        <!-- MCP 483C PN  -->
+        <ModuleItem ID="IDM_4" ModuleIdentNumber="0x0000F004">
+          <ModuleInfo>
+            <Name TextId="IDT_MOD_NAME_TEL4" />
+            <InfoText TextId="IDT_MOD_INFO_TEL4" />
+          </ModuleInfo>
+          <VirtualSubmoduleList>
+            <VirtualSubmoduleItem ID="IDS_4" SubmoduleIdentNumber="0x00000004">
+              <IOData IOPS_Length="1" IOCS_Length="1">
+                <Input Consistency="Item consistency">
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                </Input>
+                <Output Consistency="Item consistency">
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                </Output>
+              </IOData>
+              <ModuleInfo>
+                <Name TextId="IDT_SM_NAME_TEL4" />
+                <InfoText TextId="IDT_SM_INFO_TEL4" />
+              </ModuleInfo>
+            </VirtualSubmoduleItem>
+          </VirtualSubmoduleList>
+        </ModuleItem>
+        <!-- MCP 483 PN -->
+        <ModuleItem ID="IDM_5" ModuleIdentNumber="0x0000F005">
+          <ModuleInfo>
+            <Name TextId="IDT_MOD_NAME_TEL5" />
+            <InfoText TextId="IDT_MOD_INFO_TEL5" />
+          </ModuleInfo>
+          <VirtualSubmoduleList>
+            <VirtualSubmoduleItem ID="IDS_5" SubmoduleIdentNumber="0x00000005">
+              <IOData IOPS_Length="1" IOCS_Length="1">
+                <Input Consistency="Item consistency">
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                </Input>
+                <Output Consistency="Item consistency">
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                </Output>
+              </IOData>
+              <ModuleInfo>
+                <Name TextId="IDT_SM_NAME_TEL5" />
+                <InfoText TextId="IDT_SM_INFO_TEL5" />
+              </ModuleInfo>
+            </VirtualSubmoduleItem>
+          </VirtualSubmoduleList>
+        </ModuleItem>
+        <!-- MCP 416 PN -->
+        <ModuleItem ID="IDM_6" ModuleIdentNumber="0x0000F006">
+          <ModuleInfo>
+            <Name TextId="IDT_MOD_NAME_TEL6" />
+            <InfoText TextId="IDT_MOD_INFO_TEL6" />
+          </ModuleInfo>
+          <VirtualSubmoduleList>
+            <VirtualSubmoduleItem ID="IDS_6" SubmoduleIdentNumber="0x00000006">
+              <IOData IOPS_Length="1" IOCS_Length="1">
+                <Input Consistency="Item consistency">
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                </Input>
+                <Output Consistency="Item consistency">
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                </Output>
+              </IOData>
+              <ModuleInfo>
+                <Name TextId="IDT_SM_NAME_TEL6" />
+                <InfoText TextId="IDT_SM_INFO_TEL6" />
+              </ModuleInfo>
+            </VirtualSubmoduleItem>
+          </VirtualSubmoduleList>
+        </ModuleItem>
+        <!-- MPP 310 PN -->
+        <ModuleItem ID="IDM_7" ModuleIdentNumber="0x0000F007">
+          <ModuleInfo>
+            <Name TextId="IDT_MOD_NAME_TEL7" />
+            <InfoText TextId="IDT_MOD_INFO_TEL7" />
+          </ModuleInfo>
+          <VirtualSubmoduleList>
+            <VirtualSubmoduleItem ID="IDS_7" SubmoduleIdentNumber="0x00000007">
+              <IOData IOPS_Length="1" IOCS_Length="1">
+                <Input Consistency="Item consistency">
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                </Input>
+                <Output Consistency="Item consistency">
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                </Output>
+              </IOData>
+              <ModuleInfo>
+                <Name TextId="IDT_SM_NAME_TEL7" />
+                <InfoText TextId="IDT_SM_INFO_TEL7" />
+              </ModuleInfo>
+            </VirtualSubmoduleItem>
+          </VirtualSubmoduleList>
+        </ModuleItem>
+        <!-- MPP 483 PN C-200 standard 14/8 Byte -->
+        <ModuleItem ID="IDM_8" ModuleIdentNumber="0x0000F008">
+          <ModuleInfo>
+            <Name TextId="IDT_MOD_NAME_TEL8" />
+            <InfoText TextId="IDT_MOD_INFO_TEL8" />
+          </ModuleInfo>
+          <VirtualSubmoduleList>
+            <VirtualSubmoduleItem ID="IDS_8" SubmoduleIdentNumber="0x00000008">
+              <IOData IOPS_Length="1" IOCS_Length="1">
+                <Input Consistency="Item consistency">
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                </Input>
+                <Output Consistency="Item consistency">
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                </Output>
+              </IOData>
+              <ModuleInfo>
+                <Name TextId="IDT_SM_NAME_TEL8" />
+                <InfoText TextId="IDT_SM_INFO_TEL8" />
+              </ModuleInfo>
+            </VirtualSubmoduleItem>
+          </VirtualSubmoduleList>
+        </ModuleItem>
+        <!-- MCP 429 PN -->
+        <ModuleItem ID="IDM_9" ModuleIdentNumber="0x0000F009">
+          <ModuleInfo>
+            <Name TextId="IDT_MOD_NAME_TEL9" />
+            <InfoText TextId="IDT_MOD_INFO_TEL9" />
+          </ModuleInfo>
+          <VirtualSubmoduleList>
+            <VirtualSubmoduleItem ID="IDS_9" SubmoduleIdentNumber="0x00000009">
+              <IOData IOPS_Length="1" IOCS_Length="1">
+                <Input Consistency="Item consistency">
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                </Input>
+                <Output Consistency="Item consistency">
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                </Output>
+              </IOData>
+              <ModuleInfo>
+                <Name TextId="IDT_SM_NAME_TEL9" />
+                <InfoText TextId="IDT_SM_INFO_TEL9" />
+              </ModuleInfo>
+            </VirtualSubmoduleItem>
+          </VirtualSubmoduleList>
+        </ModuleItem>
+        <!-- OP 015 Slimline -->
+        <ModuleItem ID="IDM_10" ModuleIdentNumber="0x0000F00A">
+          <ModuleInfo>
+            <Name TextId="IDT_MOD_NAME_TEL10" />
+            <InfoText TextId="IDT_MOD_INFO_TEL10" />
+          </ModuleInfo>
+          <VirtualSubmoduleList>
+            <VirtualSubmoduleItem ID="IDS_10" SubmoduleIdentNumber="0x0000000A">
+              <IOData IOPS_Length="1" IOCS_Length="1">
+                <Input Consistency="Item consistency">
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                </Input>
+                <Output Consistency="Item consistency">
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                </Output>
+              </IOData>
+              <ModuleInfo>
+                <Name TextId="IDT_SM_NAME_TEL10" />
+                <InfoText TextId="IDT_SM_INFO_TEL10" />
+              </ModuleInfo>
+            </VirtualSubmoduleItem>
+          </VirtualSubmoduleList>
+        </ModuleItem>
+        <!-- MPP 483 PN -->
+        <ModuleItem ID="IDM_11" ModuleIdentNumber="0x0000F00B">
+          <ModuleInfo>
+            <Name TextId="IDT_MOD_NAME_TEL11" />
+            <InfoText TextId="IDT_MOD_INFO_TEL11" />
+          </ModuleInfo>
+          <VirtualSubmoduleList>
+            <VirtualSubmoduleItem ID="IDS_11" SubmoduleIdentNumber="0x0000000B">
+              <IOData IOPS_Length="1" IOCS_Length="1">
+                <Input Consistency="Item consistency">
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_INVAL" />
+                </Input>
+                <Output Consistency="Item consistency">
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                  <DataItem DataType="Unsigned8" TextId="IDT_DATAITEM_OUTVAL" />
+                </Output>
+              </IOData>
+              <ModuleInfo>
+                <Name TextId="IDT_SM_NAME_TEL11" />
+                <InfoText TextId="IDT_SM_INFO_TEL11" />
+              </ModuleInfo>
+            </VirtualSubmoduleItem>
+          </VirtualSubmoduleList>
+        </ModuleItem>
+        <!-- Option handwheels  (always two) -->
+        <ModuleItem ID="IDM_128" ModuleIdentNumber="0x0000F080">
+          <ModuleInfo>
+            <Name TextId="IDT_MOD_NAME_TEL128" />
+            <InfoText TextId="IDT_MOD_INFO_TEL128" />
+          </ModuleInfo>
+          <VirtualSubmoduleList>
+            <VirtualSubmoduleItem ID="IDS_128" SubmoduleIdentNumber="0x00000080">
+              <IOData IOPS_Length="1" IOCS_Length="1">
+                <Input Consistency="Item consistency">
+                  <DataItem DataType="Unsigned16" TextId="IDT_DATAITEM_INVAL" />
+                  <DataItem DataType="Unsigned16" TextId="IDT_DATAITEM_INVAL" />
+                </Input>
+              </IOData>
+              <ModuleInfo>
+                <Name TextId="IDT_SM_NAME_TEL128" />
+                <InfoText TextId="IDT_SM_INFO_TEL128" />
+              </ModuleInfo>
+            </VirtualSubmoduleItem>
+          </VirtualSubmoduleList>
+        </ModuleItem>
+      </ModuleList>
+      <!-- ============================================================================================ -->
+      <GraphicsList>
+        <GraphicItem ID="IDGR_DEVICE" GraphicFile="gsdmcp-0002-0705" />
+      </GraphicsList>
+      <!-- ============================================================================================ -->
+      <ExternalTextList>
+        <PrimaryLanguage>
+          <!-- module text -->
+          <Text TextId="IDT_MOD_NAME_TEL1" Value="Universal" />
+          <Text TextId="IDT_MOD_INFO_TEL1" Value="Universal" />
+          <Text TextId="IDT_SM_NAME_TEL1" Value="Universal" />
+          <Text TextId="IDT_SM_INFO_TEL1" Value="Universal" />
+          <Text TextId="IDT_MOD_NAME_TEL2" Value="MCP 310C PN" />
+          <Text TextId="IDT_MOD_INFO_TEL2" Value="MCP 310C PN" />
+          <Text TextId="IDT_SM_NAME_TEL2" Value="MCP 310C PN" />
+          <Text TextId="IDT_SM_INFO_TEL2" Value="MCP 310C PN" />
+          <Text TextId="IDT_MOD_NAME_TEL3" Value="MCP 310 PN" />
+          <Text TextId="IDT_MOD_INFO_TEL3" Value="MCP 310 PN" />
+          <Text TextId="IDT_SM_NAME_TEL3" Value="MCP 310 PN" />
+          <Text TextId="IDT_SM_INFO_TEL3" Value="MCP 310 PN" />
+          <Text TextId="IDT_MOD_NAME_TEL4" Value="MCP 483C PN" />
+          <Text TextId="IDT_MOD_INFO_TEL4" Value="MCP 483C PN" />
+          <Text TextId="IDT_SM_NAME_TEL4" Value="MCP 483C PN" />
+          <Text TextId="IDT_SM_INFO_TEL4" Value="MCP 483C PN" />
+          <Text TextId="IDT_MOD_NAME_TEL5" Value="MCP 483 PN" />
+          <Text TextId="IDT_MOD_INFO_TEL5" Value="MCP 483 PN" />
+          <Text TextId="IDT_SM_NAME_TEL5" Value="MCP 483 PN" />
+          <Text TextId="IDT_SM_INFO_TEL5" Value="MCP 483 PN" />
+          <Text TextId="IDT_MOD_NAME_TEL6" Value="MCP 416 PN" />
+          <Text TextId="IDT_MOD_INFO_TEL6" Value="MCP 416 PN" />
+          <Text TextId="IDT_SM_NAME_TEL6" Value="MCP 416 PN" />
+          <Text TextId="IDT_SM_INFO_TEL6" Value="MCP 416 PN" />
+          <Text TextId="IDT_MOD_NAME_TEL7" Value="MPP 310 PN" />
+          <Text TextId="IDT_MOD_INFO_TEL7" Value="MPP 310 PN" />
+          <Text TextId="IDT_SM_NAME_TEL7" Value="MPP 310 PN" />
+          <Text TextId="IDT_SM_INFO_TEL7" Value="MPP 310 PN" />
+          <Text TextId="IDT_MOD_NAME_TEL8" Value="MPP 483 PN C-200" />
+          <Text TextId="IDT_MOD_INFO_TEL8" Value="MPP 483 PN C-200" />
+          <Text TextId="IDT_SM_NAME_TEL8" Value="MPP 483 PN C-200" />
+          <Text TextId="IDT_SM_INFO_TEL8" Value="MPP 483 PN C-200" />
+          <Text TextId="IDT_MOD_NAME_TEL9" Value="MCP 429 PN" />
+          <Text TextId="IDT_MOD_INFO_TEL9" Value="MCP 429 PN" />
+          <Text TextId="IDT_SM_NAME_TEL9" Value="MCP 429 PN" />
+          <Text TextId="IDT_SM_INFO_TEL9" Value="MCP 429 PN" />
+          <Text TextId="IDT_MOD_NAME_TEL10" Value="OP 015 Slimline PN" />
+          <Text TextId="IDT_MOD_INFO_TEL10" Value="OP 015 Slimline PN" />
+          <Text TextId="IDT_SM_NAME_TEL10" Value="OP 015 Slimline PN" />
+          <Text TextId="IDT_SM_INFO_TEL10" Value="OP 015 Slimline PN" />
+          <Text TextId="IDT_MOD_NAME_TEL11" Value="MPP 483 PN" />
+          <Text TextId="IDT_MOD_INFO_TEL11" Value="MPP 483 PN" />
+          <Text TextId="IDT_SM_NAME_TEL11" Value="MPP 483 PN" />
+          <Text TextId="IDT_SM_INFO_TEL11" Value="MPP 483 PN" />
+          <Text TextId="IDT_MOD_NAME_TEL128" Value="Option handwheels" />
+          <Text TextId="IDT_MOD_INFO_TEL128" Value="Option handwheels" />
+          <Text TextId="IDT_SM_NAME_TEL128" Value="Option handwheels" />
+          <Text TextId="IDT_SM_INFO_TEL128" Value="Option handwheels" />
+          <Text TextId="IDT_DATAITEM_INVAL" Value="Activ input" />
+          <Text TextId="IDT_DATAITEM_OUTVAL" Value="Activ output" />
+          <!-- DAP text -->
+          <Text TextId="IDT_FamilyDescription" Value="IO-Devices for motion control applications" />
+          <Text TextId="IDT_MOD_NAME_DAP1" Value="MCP/MPP" />
+          <Text TextId="IDT_INFO_DAP1" Value="PROFINET IO-Device MCP/MPP for motion control applications" />
+          <Text TextId="IDT_SS_Interface" Value="Interface" />
+          <Text TextId="IDT_SS_Port1" Value="X1" />
+          <Text TextId="IDT_SS_Port2" Value="X2" />
+          <Text TextId="IDT_Interface1" Value="MCP" />
+          <Text TextId="IDT_Port1" Value="port-001" />
+          <Text TextId="IDT_Port2" Value="port-002" />
+        </PrimaryLanguage>
+        <Language xml:lang="de">
+          <!-- module text -->
+          <Text TextId="IDT_MOD_NAME_TEL1" Value="Universal" />
+          <Text TextId="IDT_MOD_INFO_TEL1" Value="Universal" />
+          <Text TextId="IDT_SM_NAME_TEL1" Value="Universal" />
+          <Text TextId="IDT_SM_INFO_TEL1" Value="Universal" />
+          <Text TextId="IDT_MOD_NAME_TEL2" Value="MCP 310C PN" />
+          <Text TextId="IDT_MOD_INFO_TEL2" Value="MCP 310C PN" />
+          <Text TextId="IDT_SM_NAME_TEL2" Value="MCP 310C PN" />
+          <Text TextId="IDT_SM_INFO_TEL2" Value="MCP 310C PN" />
+          <Text TextId="IDT_MOD_NAME_TEL3" Value="MCP 310 PN" />
+          <Text TextId="IDT_MOD_INFO_TEL3" Value="MCP 310 PN" />
+          <Text TextId="IDT_SM_NAME_TEL3" Value="MCP 310 PN" />
+          <Text TextId="IDT_SM_INFO_TEL3" Value="MCP 310 PN" />
+          <Text TextId="IDT_MOD_NAME_TEL4" Value="MCP 483C PN" />
+          <Text TextId="IDT_MOD_INFO_TEL4" Value="MCP 483C PN" />
+          <Text TextId="IDT_SM_NAME_TEL4" Value="MCP 483C PN" />
+          <Text TextId="IDT_SM_INFO_TEL4" Value="MCP 483C PN" />
+          <Text TextId="IDT_MOD_NAME_TEL5" Value="MCP 483 PN" />
+          <Text TextId="IDT_MOD_INFO_TEL5" Value="MCP 483 PN" />
+          <Text TextId="IDT_SM_NAME_TEL5" Value="MCP 483 PN" />
+          <Text TextId="IDT_SM_INFO_TEL5" Value="MCP 483 PN" />
+          <Text TextId="IDT_MOD_NAME_TEL6" Value="MCP 416 PN" />
+          <Text TextId="IDT_MOD_INFO_TEL6" Value="MCP 416 PN" />
+          <Text TextId="IDT_SM_NAME_TEL6" Value="MCP 416 PN" />
+          <Text TextId="IDT_SM_INFO_TEL6" Value="MCP 416 PN" />
+          <Text TextId="IDT_MOD_NAME_TEL7" Value="MPP 310 PN" />
+          <Text TextId="IDT_MOD_INFO_TEL7" Value="MPP 310 PN" />
+          <Text TextId="IDT_SM_NAME_TEL7" Value="MPP 310 PN" />
+          <Text TextId="IDT_SM_INFO_TEL7" Value="MPP 310 PN" />
+          <Text TextId="IDT_MOD_NAME_TEL8" Value="MPP 483 PN C-200" />
+          <Text TextId="IDT_MOD_INFO_TEL8" Value="MPP 483 PN C-200" />
+          <Text TextId="IDT_SM_NAME_TEL8" Value="MPP 483 PN C-200" />
+          <Text TextId="IDT_SM_INFO_TEL8" Value="MPP 483 PN C-200" />
+          <Text TextId="IDT_MOD_NAME_TEL9" Value="MCP 429 PN" />
+          <Text TextId="IDT_MOD_INFO_TEL9" Value="MCP 429 PN" />
+          <Text TextId="IDT_SM_NAME_TEL9" Value="MCP 429 PN" />
+          <Text TextId="IDT_SM_INFO_TEL9" Value="MCP 429 PN" />
+          <Text TextId="IDT_MOD_NAME_TEL10" Value="OP 015 Slimline" />
+          <Text TextId="IDT_MOD_INFO_TEL10" Value="OP 015 Slimline" />
+          <Text TextId="IDT_SM_NAME_TEL10" Value="OP 015 Slimline" />
+          <Text TextId="IDT_SM_INFO_TEL10" Value="OP 015 Slimline" />
+          <Text TextId="IDT_MOD_NAME_TEL11" Value="MPP 483 PN" />
+          <Text TextId="IDT_MOD_INFO_TEL11" Value="MPP 483 PN" />
+          <Text TextId="IDT_SM_NAME_TEL11" Value="MPP 483 PN" />
+          <Text TextId="IDT_SM_INFO_TEL11" Value="MPP 483 PN" />
+          <Text TextId="IDT_MOD_NAME_TEL128" Value="Option handwheels" />
+          <Text TextId="IDT_MOD_INFO_TEL128" Value="Option handwheels" />
+          <Text TextId="IDT_SM_NAME_TEL128" Value="Option handwheels" />
+          <Text TextId="IDT_SM_INFO_TEL128" Value="Option handwheels" />
+          <Text TextId="IDT_DATAITEM_INVAL" Value="Activ input" />
+          <Text TextId="IDT_DATAITEM_OUTVAL" Value="Aktiv output" />
+          <!-- DAP text -->
+          <Text TextId="IDT_FamilyDescription" Value="IO-Devices for motion control applications" />
+          <Text TextId="IDT_MOD_NAME_DAP1" Value="MCP/MPP" />
+          <Text TextId="IDT_INFO_DAP1" Value="PROFINET IO-Device MCP/MPP for motion control applications" />
+          <Text TextId="IDT_SS_Interface" Value="Interface" />
+          <Text TextId="IDT_SS_Port1" Value="X1" />
+          <Text TextId="IDT_SS_Port2" Value="X2" />
+          <Text TextId="IDT_Interface1" Value="MCP" />
+          <Text TextId="IDT_Port1" Value="port-001" />
+          <Text TextId="IDT_Port2" Value="port-002" />
+        </Language>
+        <Language xml:lang="es">
+          <!-- module text -->
+          <Text TextId="IDT_MOD_NAME_TEL1" Value="Universal" />
+          <Text TextId="IDT_MOD_INFO_TEL1" Value="Universal" />
+          <Text TextId="IDT_SM_NAME_TEL1" Value="Universal" />
+          <Text TextId="IDT_SM_INFO_TEL1" Value="Universal" />
+          <Text TextId="IDT_MOD_NAME_TEL2" Value="MCP 310C PN" />
+          <Text TextId="IDT_MOD_INFO_TEL2" Value="MCP 310C PN" />
+          <Text TextId="IDT_SM_NAME_TEL2" Value="MCP 310C PN" />
+          <Text TextId="IDT_SM_INFO_TEL2" Value="MCP 310C PN" />
+          <Text TextId="IDT_MOD_NAME_TEL3" Value="MCP 310 PN" />
+          <Text TextId="IDT_MOD_INFO_TEL3" Value="MCP 310 PN" />
+          <Text TextId="IDT_SM_NAME_TEL3" Value="MCP 310 PN" />
+          <Text TextId="IDT_SM_INFO_TEL3" Value="MCP 310 PN" />
+          <Text TextId="IDT_MOD_NAME_TEL4" Value="MCP 483C PN" />
+          <Text TextId="IDT_MOD_INFO_TEL4" Value="MCP 483C PN" />
+          <Text TextId="IDT_SM_NAME_TEL4" Value="MCP 483C PN" />
+          <Text TextId="IDT_SM_INFO_TEL4" Value="MCP 483C PN" />
+          <Text TextId="IDT_MOD_NAME_TEL5" Value="MCP 483 PN" />
+          <Text TextId="IDT_MOD_INFO_TEL5" Value="MCP 483 PN" />
+          <Text TextId="IDT_SM_NAME_TEL5" Value="MCP 483 PN" />
+          <Text TextId="IDT_SM_INFO_TEL5" Value="MCP 483 PN" />
+          <Text TextId="IDT_MOD_NAME_TEL6" Value="MCP 416 PN" />
+          <Text TextId="IDT_MOD_INFO_TEL6" Value="MCP 416 PN" />
+          <Text TextId="IDT_SM_NAME_TEL6" Value="MCP 416 PN" />
+          <Text TextId="IDT_SM_INFO_TEL6" Value="MCP 416 PN" />
+          <Text TextId="IDT_MOD_NAME_TEL7" Value="MPP 310 PN" />
+          <Text TextId="IDT_MOD_INFO_TEL7" Value="MPP 310 PN" />
+          <Text TextId="IDT_SM_NAME_TEL7" Value="MPP 310 PN" />
+          <Text TextId="IDT_SM_INFO_TEL7" Value="MPP 310 PN" />
+          <Text TextId="IDT_MOD_NAME_TEL8" Value="MPP 483 PN C-200" />
+          <Text TextId="IDT_MOD_INFO_TEL8" Value="MPP 483 PN C-200" />
+          <Text TextId="IDT_SM_NAME_TEL8" Value="MPP 483 PN C-200" />
+          <Text TextId="IDT_SM_INFO_TEL8" Value="MPP 483 PN C-200" />
+          <Text TextId="IDT_MOD_NAME_TEL9" Value="MCP 429 PN" />
+          <Text TextId="IDT_MOD_INFO_TEL9" Value="MCP 429 PN" />
+          <Text TextId="IDT_SM_NAME_TEL9" Value="MCP 429 PN" />
+          <Text TextId="IDT_SM_INFO_TEL9" Value="MCP 429 PN" />
+          <Text TextId="IDT_MOD_NAME_TEL10" Value="OP 015 Slimline" />
+          <Text TextId="IDT_MOD_INFO_TEL10" Value="OP 015 Slimline" />
+          <Text TextId="IDT_SM_NAME_TEL10" Value="OP 015 Slimline" />
+          <Text TextId="IDT_SM_INFO_TEL10" Value="OP 015 Slimline" />
+          <Text TextId="IDT_MOD_NAME_TEL11" Value="MPP 483 PN" />
+          <Text TextId="IDT_MOD_INFO_TEL11" Value="MPP 483 PN" />
+          <Text TextId="IDT_SM_NAME_TEL11" Value="MPP 483 PN" />
+          <Text TextId="IDT_SM_INFO_TEL11" Value="MPP 483 PN" />
+          <Text TextId="IDT_MOD_NAME_TEL128" Value="Option handwheels" />
+          <Text TextId="IDT_MOD_INFO_TEL128" Value="Option handwheels" />
+          <Text TextId="IDT_SM_NAME_TEL128" Value="Option handwheels" />
+          <Text TextId="IDT_SM_INFO_TEL128" Value="Option handwheels" />
+          <Text TextId="IDT_DATAITEM_INVAL" Value="Activ input" />
+          <Text TextId="IDT_DATAITEM_OUTVAL" Value="Aktiv output" />
+          <!-- DAP text -->
+          <Text TextId="IDT_FamilyDescription" Value="IO-Devices for motion control applications" />
+          <Text TextId="IDT_MOD_NAME_DAP1" Value="MCP/MPP" />
+          <Text TextId="IDT_INFO_DAP1" Value="PROFINET IO-Device MCP/MPP for motion control applications" />
+          <Text TextId="IDT_SS_Interface" Value="Interface" />
+          <Text TextId="IDT_SS_Port1" Value="X1" />
+          <Text TextId="IDT_SS_Port2" Value="X2" />
+          <Text TextId="IDT_Interface1" Value="MCP" />
+          <Text TextId="IDT_Port1" Value="port-001" />
+          <Text TextId="IDT_Port2" Value="port-002" />
+        </Language>
+        <Language xml:lang="fr">
+          <!-- module text -->
+          <Text TextId="IDT_MOD_NAME_TEL1" Value="Universal" />
+          <Text TextId="IDT_MOD_INFO_TEL1" Value="Universal" />
+          <Text TextId="IDT_SM_NAME_TEL1" Value="Universal" />
+          <Text TextId="IDT_SM_INFO_TEL1" Value="Universal" />
+          <Text TextId="IDT_MOD_NAME_TEL2" Value="MCP 310C PN" />
+          <Text TextId="IDT_MOD_INFO_TEL2" Value="MCP 310C PN" />
+          <Text TextId="IDT_SM_NAME_TEL2" Value="MCP 310C PN" />
+          <Text TextId="IDT_SM_INFO_TEL2" Value="MCP 310C PN" />
+          <Text TextId="IDT_MOD_NAME_TEL3" Value="MCP 310 PN" />
+          <Text TextId="IDT_MOD_INFO_TEL3" Value="MCP 310 PN" />
+          <Text TextId="IDT_SM_NAME_TEL3" Value="MCP 310 PN" />
+          <Text TextId="IDT_SM_INFO_TEL3" Value="MCP 310 PN" />
+          <Text TextId="IDT_MOD_NAME_TEL4" Value="MCP 483C PN" />
+          <Text TextId="IDT_MOD_INFO_TEL4" Value="MCP 483C PN" />
+          <Text TextId="IDT_SM_NAME_TEL4" Value="MCP 483C PN" />
+          <Text TextId="IDT_SM_INFO_TEL4" Value="MCP 483C PN" />
+          <Text TextId="IDT_MOD_NAME_TEL5" Value="MCP 483 PN" />
+          <Text TextId="IDT_MOD_INFO_TEL5" Value="MCP 483 PN" />
+          <Text TextId="IDT_SM_NAME_TEL5" Value="MCP 483 PN" />
+          <Text TextId="IDT_SM_INFO_TEL5" Value="MCP 483 PN" />
+          <Text TextId="IDT_MOD_NAME_TEL6" Value="MCP 416 PN" />
+          <Text TextId="IDT_MOD_INFO_TEL6" Value="MCP 416 PN" />
+          <Text TextId="IDT_SM_NAME_TEL6" Value="MCP 416 PN" />
+          <Text TextId="IDT_SM_INFO_TEL6" Value="MCP 416 PN" />
+          <Text TextId="IDT_MOD_NAME_TEL7" Value="MPP 310 PN" />
+          <Text TextId="IDT_MOD_INFO_TEL7" Value="MPP 310 PN" />
+          <Text TextId="IDT_SM_NAME_TEL7" Value="MPP 310 PN" />
+          <Text TextId="IDT_SM_INFO_TEL7" Value="MPP 310 PN" />
+          <Text TextId="IDT_MOD_NAME_TEL8" Value="MPP 483 PN C-200" />
+          <Text TextId="IDT_MOD_INFO_TEL8" Value="MPP 483 PN C-200" />
+          <Text TextId="IDT_SM_NAME_TEL8" Value="MPP 483 PN C-200" />
+          <Text TextId="IDT_SM_INFO_TEL8" Value="MPP 483 PN C-200" />
+          <Text TextId="IDT_MOD_NAME_TEL9" Value="MCP 429 PN" />
+          <Text TextId="IDT_MOD_INFO_TEL9" Value="MCP 429 PN" />
+          <Text TextId="IDT_SM_NAME_TEL9" Value="MCP 429 PN" />
+          <Text TextId="IDT_SM_INFO_TEL9" Value="MCP 429 PN" />
+          <Text TextId="IDT_MOD_NAME_TEL10" Value="OP 015 Slimline" />
+          <Text TextId="IDT_MOD_INFO_TEL10" Value="OP 015 Slimline" />
+          <Text TextId="IDT_SM_NAME_TEL10" Value="OP 015 Slimline" />
+          <Text TextId="IDT_SM_INFO_TEL10" Value="OP 015 Slimline" />
+          <Text TextId="IDT_MOD_NAME_TEL11" Value="MPP 483 PN" />
+          <Text TextId="IDT_MOD_INFO_TEL11" Value="MPP 483 PN" />
+          <Text TextId="IDT_SM_NAME_TEL11" Value="MPP 483 PN" />
+          <Text TextId="IDT_SM_INFO_TEL11" Value="MPP 483 PN" />
+          <Text TextId="IDT_MOD_NAME_TEL128" Value="Option handwheels" />
+          <Text TextId="IDT_MOD_INFO_TEL128" Value="Option handwheels" />
+          <Text TextId="IDT_SM_NAME_TEL128" Value="Option handwheels" />
+          <Text TextId="IDT_SM_INFO_TEL128" Value="Option handwheels" />
+          <Text TextId="IDT_DATAITEM_INVAL" Value="Activ input" />
+          <Text TextId="IDT_DATAITEM_OUTVAL" Value="Aktiv output" />
+          <!-- DAP text -->
+          <Text TextId="IDT_FamilyDescription" Value="IO-Devices for motion control applications" />
+          <Text TextId="IDT_MOD_NAME_DAP1" Value="MCP/MPP" />
+          <Text TextId="IDT_INFO_DAP1" Value="PROFINET IO-Device MCP/MPP for motion control applications" />
+          <Text TextId="IDT_SS_Interface" Value="Interface" />
+          <Text TextId="IDT_SS_Port1" Value="X1" />
+          <Text TextId="IDT_SS_Port2" Value="X2" />
+          <Text TextId="IDT_Interface1" Value="MCP" />
+          <Text TextId="IDT_Port1" Value="port-001" />
+          <Text TextId="IDT_Port2" Value="port-002" />
+        </Language>
+        <Language xml:lang="it">
+          <!-- module text -->
+          <Text TextId="IDT_MOD_NAME_TEL1" Value="Universal" />
+          <Text TextId="IDT_MOD_INFO_TEL1" Value="Universal" />
+          <Text TextId="IDT_SM_NAME_TEL1" Value="Universal" />
+          <Text TextId="IDT_SM_INFO_TEL1" Value="Universal" />
+          <Text TextId="IDT_MOD_NAME_TEL2" Value="MCP 310C PN" />
+          <Text TextId="IDT_MOD_INFO_TEL2" Value="MCP 310C PN" />
+          <Text TextId="IDT_SM_NAME_TEL2" Value="MCP 310C PN" />
+          <Text TextId="IDT_SM_INFO_TEL2" Value="MCP 310C PN" />
+          <Text TextId="IDT_MOD_NAME_TEL3" Value="MCP 310 PN" />
+          <Text TextId="IDT_MOD_INFO_TEL3" Value="MCP 310 PN" />
+          <Text TextId="IDT_SM_NAME_TEL3" Value="MCP 310 PN" />
+          <Text TextId="IDT_SM_INFO_TEL3" Value="MCP 310 PN" />
+          <Text TextId="IDT_MOD_NAME_TEL4" Value="MCP 483C PN" />
+          <Text TextId="IDT_MOD_INFO_TEL4" Value="MCP 483C PN" />
+          <Text TextId="IDT_SM_NAME_TEL4" Value="MCP 483C PN" />
+          <Text TextId="IDT_SM_INFO_TEL4" Value="MCP 483C PN" />
+          <Text TextId="IDT_MOD_NAME_TEL5" Value="MCP 483 PN" />
+          <Text TextId="IDT_MOD_INFO_TEL5" Value="MCP 483 PN" />
+          <Text TextId="IDT_SM_NAME_TEL5" Value="MCP 483 PN" />
+          <Text TextId="IDT_SM_INFO_TEL5" Value="MCP 483 PN" />
+          <Text TextId="IDT_MOD_NAME_TEL6" Value="MCP 416 PN" />
+          <Text TextId="IDT_MOD_INFO_TEL6" Value="MCP 416 PN" />
+          <Text TextId="IDT_SM_NAME_TEL6" Value="MCP 416 PN" />
+          <Text TextId="IDT_SM_INFO_TEL6" Value="MCP 416 PN" />
+          <Text TextId="IDT_MOD_NAME_TEL7" Value="MPP 310 PN" />
+          <Text TextId="IDT_MOD_INFO_TEL7" Value="MPP 310 PN" />
+          <Text TextId="IDT_SM_NAME_TEL7" Value="MPP 310 PN" />
+          <Text TextId="IDT_SM_INFO_TEL7" Value="MPP 310 PN" />
+          <Text TextId="IDT_MOD_NAME_TEL8" Value="MPP 483 PN C-200" />
+          <Text TextId="IDT_MOD_INFO_TEL8" Value="MPP 483 PN C-200" />
+          <Text TextId="IDT_SM_NAME_TEL8" Value="MPP 483 PN C-200" />
+          <Text TextId="IDT_SM_INFO_TEL8" Value="MPP 483 PN C-200" />
+          <Text TextId="IDT_MOD_NAME_TEL9" Value="MCP 429 PN" />
+          <Text TextId="IDT_MOD_INFO_TEL9" Value="MCP 429 PN" />
+          <Text TextId="IDT_SM_NAME_TEL9" Value="MCP 429 PN" />
+          <Text TextId="IDT_SM_INFO_TEL9" Value="MCP 429 PN" />
+          <Text TextId="IDT_MOD_NAME_TEL10" Value="OP 015 Slimline" />
+          <Text TextId="IDT_MOD_INFO_TEL10" Value="OP 015 Slimline" />
+          <Text TextId="IDT_SM_NAME_TEL10" Value="OP 015 Slimline" />
+          <Text TextId="IDT_SM_INFO_TEL10" Value="OP 015 Slimline" />
+          <Text TextId="IDT_MOD_NAME_TEL11" Value="MPP 483 PN" />
+          <Text TextId="IDT_MOD_INFO_TEL11" Value="MPP 483 PN" />
+          <Text TextId="IDT_SM_NAME_TEL11" Value="MPP 483 PN" />
+          <Text TextId="IDT_SM_INFO_TEL11" Value="MPP 483 PN" />
+          <Text TextId="IDT_MOD_NAME_TEL128" Value="Option handwheels" />
+          <Text TextId="IDT_MOD_INFO_TEL128" Value="Option handwheels" />
+          <Text TextId="IDT_SM_NAME_TEL128" Value="Option handwheels" />
+          <Text TextId="IDT_SM_INFO_TEL128" Value="Option handwheels" />
+          <Text TextId="IDT_DATAITEM_INVAL" Value="Activ input" />
+          <Text TextId="IDT_DATAITEM_OUTVAL" Value="Aktiv output" />
+          <!-- DAP text -->
+          <Text TextId="IDT_FamilyDescription" Value="IO-Devices for motion control applications" />
+          <Text TextId="IDT_MOD_NAME_DAP1" Value="MCP/MPP" />
+          <Text TextId="IDT_INFO_DAP1" Value="PROFINET IO-Device MCP/MPP for motion control applications" />
+          <Text TextId="IDT_SS_Interface" Value="Interface" />
+          <Text TextId="IDT_SS_Port1" Value="X1" />
+          <Text TextId="IDT_SS_Port2" Value="X2" />
+          <Text TextId="IDT_Interface1" Value="MCP" />
+          <Text TextId="IDT_Port1" Value="port-001" />
+          <Text TextId="IDT_Port2" Value="port-002" />
+        </Language>
+      </ExternalTextList>
+    </ApplicationProcess>
+  </ProfileBody>
+</ISO15745Profile>

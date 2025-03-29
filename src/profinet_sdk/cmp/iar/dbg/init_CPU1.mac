@@ -1,0 +1,70 @@
+__var val;
+
+__param WRAPCFG   = 0x80220000;
+__param BMCFGCH0  = 0x80220008;
+__param CMCFG0CS0 = 0x80220010;
+__param CMCFG1CS0 = 0x80220014;
+__param CMCFG2CS0 = 0x80220018;
+__param LIOCFGCS0 = 0x80220050;
+__param LIOCFGCS1 = 0x80220054;
+__param BMCTL0    = 0x80220060;
+__param BMCTL1    = 0x80220064;
+
+__param CDCTL0    = 0x80220070;
+__param CDTBUF0   = 0x80220080;
+__param CDABUF0   = 0x80220084;
+__param CDD0BUF0  = 0x80220088;
+__param CDD1BUF0  = 0x8022008c;
+
+__param INTS      = 0x80220190;
+__param INTC      = 0x80220194;
+
+__param BTCM_ADDR = 0x00100000;
+__param BTCM_SIZE = 0x00010000;
+
+__param ATCM_ADDR = 0x00000000;
+__param ATCM_SIZE = 0x00080000;
+
+__param PRCRS     = 0x81281A00;
+__param PRCRN     = 0x80281A10;
+
+__param CPU0WAIT  = 0x81281910;
+__param SCKCR2    = 0x81280004;
+
+__param SWRCPU1    = 0x81280230;
+
+
+execUserPreload()
+{
+	__message "Executing execUserPreload() function\n";
+	// reg_write_protect_release();
+    //      CPU1_enable();
+}
+
+execUserPreReset()
+{
+	__message "Executing execUserPreReset() function\n";
+}
+
+execUserReset()
+{
+	__message "Executing execUserReset() function\n";
+//	__hwReset(0);
+//	reg_write_protect_release();
+//          CPU1_enable();
+//	enable_BTCM();
+//	init_xSPI();
+}
+
+reg_write_protect_release()
+{
+	__writeMemory32(0x0000A51F, PRCRS, "Memory");
+	__writeMemory32(0x0000A51F, PRCRN, "Memory");
+}
+
+CPU1_enable()
+{
+	__writeMemory32(0x0000A51F, PRCRS, "Memory");
+	__writeMemory32(0x0000A51F, PRCRN, "Memory");
+	__writeMemory32(0x00000000, SWRCPU1, "Memory");
+}

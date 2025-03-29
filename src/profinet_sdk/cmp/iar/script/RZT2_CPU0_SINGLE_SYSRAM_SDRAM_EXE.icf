@@ -1,0 +1,522 @@
+/*###ICF### Section handled by ICF editor, don't touch! ****/
+/*-Editor annotation file-*/
+/* IcfEditorFile="$TOOLKIT_DIR$\config\ide\IcfEditor\a_v1_0.xml" */
+/*-Specials-*/
+define symbol __ICFEDIT_intvec_start__ = 0x30000000; //0x00000000;
+/*-Memory Regions-*/
+define symbol __ICFEDIT_region_ROM_start__ = 0x30002000;
+define symbol __ICFEDIT_region_ROM_end__   = 0x300FFFFF;
+define symbol __ICFEDIT_region_RAM_start__ = 0x30100000;
+define symbol __ICFEDIT_region_RAM_end__   = 0x3017FFFF;
+/*-Sizes-*/
+define symbol __ICFEDIT_size_cstack__   = 0x800;
+define symbol __ICFEDIT_size_svcstack__ = 0x400;
+define symbol __ICFEDIT_size_irqstack__ = 0x400;
+define symbol __ICFEDIT_size_fiqstack__ = 0x400;
+define symbol __ICFEDIT_size_undstack__ = 0x400;
+define symbol __ICFEDIT_size_abtstack__ = 0x400;
+define symbol __ICFEDIT_size_heap__     = 0x000;
+/**** End of ICF editor section. ###ICF###*/
+
+define memory mem with size = 4G;
+
+define region SRAM_region   = mem:[from __ICFEDIT_region_RAM_start__   to __ICFEDIT_region_RAM_end__];
+
+define symbol __region_SYSTEM_RAM_start__        = 0x10000000;
+define symbol __region_SYSTEM_RAM_end__          = 0x1017FFFF;
+define symbol __region_SYSTEM_RAM_MIRROR_start__ = 0x30000000;
+define symbol __region_SYSTEM_RAM_MIRROR_end__   = 0x3017FFFF;
+
+define symbol __region_BOOT_PRG_start__   = 0x30000100;// 0x00000100;
+define symbol __region_BOOT_PRG_end__     = 0x300004FF;// 0x000004FF;
+define symbol __region_BSP_PRG_start__    = 0x30000500;// 0x00000500;
+define symbol __region_BSP_PRG_end__      = 0x000035FF;// 0x000035FF;
+define symbol __region_D_LDR_PRG_start__  = 0x30003600;// 0x00003600;
+define symbol __region_D_LDR_PRG_end__    = 0x30012FFF;// 0x0007FFFF;
+
+define symbol __region_BSP_DAT_start__    = 0x30013000;// 0x00100000;
+define symbol __region_BSP_DAT_end__      = 0x30014FFF;// 0x00101FFF;
+define symbol __region_BOOT_PRM_start__   = 0x30015000; //0x00102000;
+define symbol __region_BOOT_PRM_end__     = 0x300150FF; //0x001020FF;
+define symbol __region_D_LDR_DATA_start__ = 0x30015100;// 0x00102100;
+define symbol __region_D_LDR_DATA_end__   = 0x30018FFF;// 0x0010FFFF;
+define symbol __region_SRAM_CODE_start__  = 0x30019000;// 0x10000000;
+define symbol __region_SRAM_CODE_end__    = 0x30148FFF;// 0x1012FFFF;
+define symbol __region_SYS_STACK_start__  = 0x30149000;// 0x10130000;
+define symbol __region_SYS_STACK_end__    = 0x3014AFFF;// 0x10131FFF;
+define symbol __region_SRAM_DATA_start__  = 0x3014B000;// 0x10132000;
+define symbol __region_SRAM_DATA_end__    = 0x3017FFFF;// 0x1017FFFF;
+
+define symbol __region_PNIP_start__   = 0x58000000;
+define symbol __region_PNIP_end__     = 0x581FFFFF;
+
+// define symbol __region_SDRAM_CODE_start__   = 0x58200000;
+// define symbol __region_SDRAM_CODE_end__     = 0x582FFFFF;
+
+define symbol __region_K32_CODE_start__   = 0x58200000;
+define symbol __region_K32_CODE_end__     = 0x5827FFFF;
+
+define symbol __region_K32_DATA_start__   = 0x58280000;
+define symbol __region_K32_DATA_end__     = 0x582FFFFF;
+
+
+define symbol __region_SDRAM_DATA_start__   = 0x58400000;
+define symbol __region_SDRAM_DATA_end__     = 0x584FFFFF;
+
+define symbol __region_SDRAM_NC_start__      = 0x58500000;
+define symbol __region_SDRAM_NC_end__        = 0x587FFFFF;
+
+define symbol __region_HEAP_start__         = 0x58800000;
+define symbol __region_HEAP_end__           = 0x58FFFFFF;
+
+
+define symbol __region_XSPI0_MIRROR_start__ = 0x40000000;
+define symbol __region_XSPI0_MIRROR_end__   = 0x47FFFFFF;
+define symbol __region_XSPI1_MIRROR_start__ = 0x48000000;
+define symbol __region_XSPI1_MIRROR_end__   = 0x4FFFFFFF;
+define symbol __region_CS0_MIRROR_start__   = 0x50000000;
+define symbol __region_CS0_MIRROR_end__     = 0x53FFFFFF;
+define symbol __region_CS2_MIRROR_start__   = 0x54000000;
+define symbol __region_CS2_MIRROR_end__     = 0x57FFFFFF;
+define symbol __region_CS3_MIRROR_start__   = 0x58000000;
+define symbol __region_CS3_MIRROR_end__     = 0x5BFFFFFF;
+define symbol __region_CS5_MIRROR_start__   = 0x5C000000;
+define symbol __region_CS5_MIRROR_end__     = 0x5FFFFFFF;
+define symbol __region_XSPI0_start__        = 0x60000000;
+define symbol __region_XSPI0_end__          = 0x67FFFFFF;
+define symbol __region_XSPI1_start__        = 0x68000000;
+define symbol __region_XSPI1_end__          = 0x6FFFFFFF;
+define symbol __region_CS0_start__          = 0x70000000;
+define symbol __region_CS0_end__            = 0x73FFFFFF;
+define symbol __region_CS2_start__          = 0x74000000;
+define symbol __region_CS2_end__            = 0x77FFFFFF;
+define symbol __region_CS3_start__          = 0x78000000;
+define symbol __region_CS3_end__            = 0x7BFFFFFF;
+define symbol __region_CS5_start__          = 0x7C000000;
+define symbol __region_CS5_end__            = 0x7FFFFFFF;
+
+define region BOOT_PRM_region  = mem:[from __region_BOOT_PRM_start__  to __region_BOOT_PRM_end__];
+define region BOOT_PRG_region  = mem:[from __region_BOOT_PRG_start__  to __region_BOOT_PRG_end__];
+define region BSP_PRG_region  = mem:[from __region_BSP_PRG_start__  to __region_BSP_PRG_end__];
+define region BSP_DAT_region  = mem:[from __region_BSP_DAT_start__  to __region_BSP_DAT_end__];
+define region D_LDR_DATA_region = mem:[from __region_D_LDR_DATA_start__ to __region_D_LDR_DATA_end__];
+define region D_LDR_PRG_region  = mem:[from __region_D_LDR_PRG_start__  to __region_D_LDR_PRG_end__];
+define region SYS_STACK_region  = mem:[from __region_SYS_STACK_start__  to __region_SYS_STACK_end__];
+define region SRAM_CODE_region  = mem:[from __region_SRAM_CODE_start__  to __region_SRAM_CODE_end__];
+define region SRAM_DATA_region  = mem:[from __region_SRAM_DATA_start__  to __region_SRAM_DATA_end__];
+define region PNIP_region = mem:[from __region_PNIP_start__ to __region_PNIP_end__];
+define region K32_CODE_region = mem:[from __region_K32_CODE_start__ to __region_K32_CODE_end__];
+define region K32_DATA_region = mem:[from __region_K32_DATA_start__ to __region_K32_DATA_end__];
+define region SDRAM_DATA_region = mem:[from __region_SDRAM_DATA_start__ to __region_SDRAM_DATA_end__];
+define region SDRAM_NC_region   = mem:[from __region_SDRAM_NC_start__   to __region_SDRAM_NC_end__];
+define region HEAP_region       = mem:[from __region_HEAP_start__       to __region_HEAP_end__];
+
+define region ATCM_region              = mem:[from 0x00000000 size 512K];
+define region BTCM_region              = mem:[from 0x00100000 size  64K];
+define region SYSTEM_RAM_region        = mem:[from __region_SYSTEM_RAM_start__  to __region_SYSTEM_RAM_end__ ];
+define region SYSTEM_RAM_MIRROR_region = mem:[from __region_SYSTEM_RAM_MIRROR_start__  to __region_SYSTEM_RAM_MIRROR_end__ ];
+define region XSPI0_MIRROR_region      = mem:[from __region_XSPI0_MIRROR_start__  to __region_XSPI0_MIRROR_end__ ];
+define region XSPI1_MIRROR_region      = mem:[from __region_XSPI1_MIRROR_start__  to __region_XSPI1_MIRROR_end__ ];
+define region CS0_MIRROR_region        = mem:[from __region_CS0_MIRROR_start__  to __region_CS0_MIRROR_end__ ];
+define region CS2_MIRROR_region        = mem:[from __region_CS2_MIRROR_start__  to __region_CS2_MIRROR_end__ ];
+define region CS3_MIRROR_region        = mem:[from __region_CS3_MIRROR_start__  to __region_CS3_MIRROR_end__ ];
+define region CS5_MIRROR_region        = mem:[from __region_CS5_MIRROR_start__  to __region_CS5_MIRROR_end__ ];
+define region XSPI0_region             = mem:[from __region_XSPI0_start__  to __region_XSPI0_end__ ];
+define region XSPI1_region             = mem:[from __region_XSPI1_start__  to __region_XSPI1_end__ ];
+define region CS0_region               = mem:[from __region_CS0_start__  to __region_CS0_end__ ];
+define region CS2_region               = mem:[from __region_CS2_start__  to __region_CS2_end__ ];
+define region CS3_region               = mem:[from __region_CS3_start__  to __region_CS3_end__ ];
+define region CS5_region               = mem:[from __region_CS5_start__  to __region_CS5_end__ ];
+
+/* Devices on RSK board */
+define region OSPI_region   =   mem:[from 0x60000000 size   8M];
+define region HRAM_region   =   mem:[from 0x64000000 size   8M];
+define region SDRAM_region     =   mem:[from 0x78000000 to 0x79EFFFFF];  /* 31MB */
+//define region SDRAM_NC_region  =   mem:[from 0x59F00000 to 0x59FFFFFF];  /*  1MB */
+
+define block CSTACK    with alignment = 8, size = __ICFEDIT_size_cstack__   { };
+define block SVC_STACK with alignment = 8, size = __ICFEDIT_size_svcstack__ { };
+define block IRQ_STACK with alignment = 8, size = __ICFEDIT_size_irqstack__ { };
+define block FIQ_STACK with alignment = 8, size = __ICFEDIT_size_fiqstack__ { };
+define block UND_STACK with alignment = 8, size = __ICFEDIT_size_undstack__ { };
+define block ABT_STACK with alignment = 8, size = __ICFEDIT_size_abtstack__ { };
+define block HEAP      with alignment = 8, size = __ICFEDIT_size_heap__     { };
+
+	   
+								  
+define block BSP_PRG_RBLOCK with fixed order
+                             { 	section .text object vector_data.o,
+								section .text object common_interrupt_handler.o,
+								section .text object startup_ram.o,
+								section .text object hal_entry.o,
+								section .text object system.o,
+								section .text object bsp_clocks.o,
+								section .text object bsp_irq.o,
+								section .text object bsp_semaphore.o,
+								section .text object data_init.o,
+								section .text object copy_init3.o,
+								section .text object board_init.o,
+								section .text object bsp_io.o,
+								section .text object bsp_delay.o,
+								section .text object bsp_register_protection.o,
+								section .text object bsp_reset.o,
+								section .text object pin_data.o,
+								section .text object r_ioport.o,
+								section .text object hal_data.o,
+								section .text object common_data.o,
+								section .text object r_cmtw.o,
+								section .text object r_qspi.o,
+								
+								section .rodata object vector.o,
+							    section .rodata object vector_data.o,
+								section .rodata object common_interrupt_handler.o,
+								section .rodata object startup_ram.o,
+								section .rodata object hal_entry.o,
+								section .rodata object system.o,
+								section .rodata object bsp_clocks.o,
+								section .rodata object bsp_irq.o,
+								section .rodata object bsp_semaphore.o,
+								section .rodata object data_init.o,
+								section .rodata object copy_init3.o,
+								section .rodata object board_init.o,
+								section .rodata object bsp_io.o,
+								section .rodata object bsp_delay.o,
+								section .rodata object bsp_register_protection.o,
+								section .rodata object bsp_reset.o,
+								section .rodata object pin_data.o,
+								section .rodata object r_ioport.o,
+								section .rodata object hal_data.o,
+								section .rodata object common_data.o,
+								section .rodata object r_cmtw.o,
+								section .rodata object r_qspi.o}; 
+
+define block BSP_DATA_ZBLOCK { 	section .bss object vector_data.o,
+								section .bss object common_interrupt_handler.o,
+								section .bss object startup_ram.o,
+								section .bss object hal_entry.o,
+								section .bss object system.o,
+								section .bss object bsp_clocks.o,
+								section .bss object bsp_irq.o,
+								section .bss object bsp_semaphore.o,
+								section .bss object data_init.o,
+								section .bss object copy_init3.o,
+								section .bss object board_init.o,
+								section .bss object bsp_io.o,
+								section .bss object bsp_delay.o,
+								section .bss object bsp_register_protection.o,
+								section .bss object bsp_reset.o,
+								section .bss object pin_data.o,
+								section .bss object r_ioport.o,
+								section .bss object hal_data.o,
+								section .bss object common_data.o,
+								section .bss object r_cmtw.o,
+								section .bss object r_qspi.o};
+
+define block BSP_DATA_RBLOCK { 	section .data_init object vector_data.o,
+								section .data_init object common_interrupt_handler.o,
+								section .data_init object startup_ram.o,
+								section .data_init object hal_entry.o,
+								section .data_init object system.o,
+								section .data_init object bsp_clocks.o,
+								section .data_init object bsp_irq.o,
+								section .data_init object bsp_semaphore.o,
+								section .data_init object data_init.o,
+								section .data_init object copy_init3.o,
+								section .data_init object board_init.o,
+								section .data_init object bsp_io.o,
+								section .data_init object bsp_delay.o,
+								section .data_init object bsp_register_protection.o,
+								section .data_init object bsp_reset.o,
+								section .data_init object pin_data.o,
+								section .data_init object r_ioport.o,
+								section .data_init object hal_data.o,
+								section .data_init object common_data.o,
+								section .data_init object r_cmtw.o,
+								section .data_init object r_qspi.o};
+								
+define block BSP_DATA_WBLOCK { 	section .data object vector_data.o,
+								section .data object common_interrupt_handler.o,
+								section .data object startup_ram.o,
+								section .data object hal_entry.o,
+								section .data object system.o,
+								section .data object bsp_clocks.o,
+								section .data object bsp_irq.o,
+								section .data object bsp_semaphore.o,
+								section .data object data_init.o,
+								section .data object copy_init3.o,
+								section .data object board_init.o,
+								section .data object bsp_io.o,
+								section .data object bsp_delay.o,
+								section .data object bsp_register_protection.o,
+								section .data object bsp_reset.o,
+								section .data object pin_data.o,
+								section .data object r_ioport.o,
+								section .data object hal_data.o,
+								section .data object common_data.o,
+								section .data object r_cmtw.o,
+								section .data object r_qspi.o};
+
+
+define block LDR_PRG_RBLOCK  with fixed order
+							{  section .text object FreeRTOS_asm_vectors.o,
+							   section .text object FreeRTOS_tick_config.o,
+							   section .text object portASM.o,
+							   section .text object port.o,
+							   section .text object rtos_rzt2_flash.o,
+							   section .text object rtos_rzt2_qspi_flash.o,
+							   section .text object r_ether_access_rzt2.o,
+							   section .text object r_ether_phy_rzt2.o,
+							   section .text object r_ether_rzt2.o,
+							   section .text object r_ether_switch_rzt2.o,
+							   section .text object r_ether_switch_rzt2_ext.o,
+							   section .text object queue.o,
+							   section .text object list.o,
+							   section .text object tasks.o,
+							   section .text object timers.o,
+							   section .text object event_groups.o,
+							   section .text object heap_5.o,
+							   section .text object rtos_os.o,
+							   section .text object eddp_llif.o,
+							   section .text object delay_timer.o,
+							   section .rodata object FreeRTOS_asm_vectors.o,
+							   section .rodata object FreeRTOS_tick_config.o,
+							   section .rodata object portASM.o,
+							   section .rodata object rtos_rzt2_flash.o,
+							   section .rodata object rtos_rzt2_qspi_flash.o,
+							   section .rodata object r_ether_access_rzt2.o,
+							   section .rodata object r_ether_phy_rzt2.o,
+							   section .rodata object r_ether_rzt2.o,
+							   section .rodata object r_ether_switch_rzt2.o,
+							   section .rodata object r_ether_switch_rzt2_ext.o,
+							   section .rodata object tasks.o,
+							   section .rodata object timers.o,
+							   section .rodata object queue.o,
+							   section .rodata object list.o,
+							   section .rodata object event_groups.o,
+							   section .rodata object heap_5.o,
+							   section .rodata object rtos_os.o,
+							   section .rodata object eddp_llif.o,
+							   section .rodata object delay_timer.o}; 
+
+define block LDR_DATA_ZBLOCK { section .bss object FreeRTOS_asm_vectors.o,
+							   section .bss object FreeRTOS_tick_config.o,
+							   section .bss object portASM.o,
+							   section .bss object port.o,
+							   section .bss object rtos_rzt2_flash.o,
+							   section .bss object rtos_rzt2_qspi_flash.o,
+							   section .bss object r_ether_access_rzt2.o,
+							   section .bss object r_ether_phy_rzt2.o,
+							   section .bss object r_ether_rzt2.o,
+							   section .bss object r_ether_switch_rzt2.o,
+							   section .bss object r_ether_switch_rzt2_ext.o,
+							   section .bss object tasks.o,
+							   section .bss object timers.o,
+							   section .bss object queue.o,
+							   section .bss object list.o,
+							   section .bss object event_groups.o,
+							   section .bss object heap_5.o,
+							   section .bss object rtos_os.o,
+							   section .bss object eddp_llif.o,
+							   section .bss object delay_timer.o};
+
+define block LDR_DATA_RBLOCK { section .data_init object FreeRTOS_asm_vectors.o,
+							   section .data_init object FreeRTOS_tick_config.o,
+							   section .data_init object portASM.o,
+							   section .data_init object port.o,
+							   section .data_init object rtos_rzt2_flash.o,
+							   section .data_init object rtos_rzt2_qspi_flash.o,
+							   section .data_init object r_ether_access_rzt2.o,
+							   section .data_init object r_ether_phy_rzt2.o,
+							   section .data_init object r_ether_rzt2.o,
+							   section .data_init object r_ether_switch_rzt2.o,
+							   section .data_init object r_ether_switch_rzt2_ext.o,
+							   section .data_init object tasks.o,
+							   section .data_init object timers.o,
+							   section .data_init object queue.o,
+							   section .data_init object list.o,
+							   section .data_init object event_groups.o,
+							   section .data_init object heap_5.o,
+							   section .data_init object rtos_os.o,
+							   section .data_init object eddp_llif.o,
+							   section .data_init object delay_timer.o};
+
+define block LDR_DATA_WBLOCK { section .data object FreeRTOS_asm_vectors.o,
+							   section .data object FreeRTOS_tick_config.o,
+							   section .data object portASM.o,
+							   section .data object rtos_rzt2_flash.o,
+							   section .data object rtos_rzt2_qspi_flash.o,
+							   section .data object r_ether_access_rzt2.o,
+							   section .data object r_ether_phy_rzt2.o,
+							   section .data object r_ether_rzt2.o,
+							   section .data object r_ether_switch_rzt2.o,
+							   section .data object r_ether_switch_rzt2_ext.o,
+							   section .data object tasks.o,
+							   section .data object timers.o,
+							   section .data object queue.o,
+							   section .data object list.o,
+							   section .data object event_groups.o,
+							   section .data object heap_5.o,
+							   section .data object rtos_os.o,
+							   section .data object eddp_llif.o,
+							   section .data object delay_timer.o};
+
+define block VECTOR_RBLOCK { ro code object vector.o };
+define block BOOT_PRM_BLOCK { ro code object sys_boot_prm.o, section BOOT_PRM}; 
+define block BOOT_PRG_BLOCK { ro code object startup_rom.o, section BOOT_PRG}; 
+//define block VECTOR_RBLOCK { section intvec, block VECTOR_PRG_RBLOCK, section VECTOR_DATA_RBLOCK, block VECTOR_DATA_RBLOCK  };
+//define block ROM_IMG_HDR_RBLOCK { section ROM_IMG_HDR }; , section .rodata, section .text 
+
+define block USER_PRG_RBLOCK { ro code};
+define block USER_DATA_ZBLOCK { section .bss };
+define block USER_DATA_RBLOCK { section .data_init, section __DLIB_PERTHREAD_init };
+define block USER_DATA_WBLOCK { section .data, section __DLIB_PERTHREAD };
+
+
+initialize by copy { readwrite }; 
+                        
+do not initialize  {   section .noinit,
+					   section .bss object vector.o,
+					   section .bss object vector_data.o,
+					   section .bss object common_interrupt_handler.o,
+					   section .bss object hal_entry.o,
+					   section .bss object startup_ram.o,
+					   section .bss object system.o,
+					   section .bss object bsp_clocks.o,
+					   section .bss object bsp_irq.o,
+					   section .bss object bsp_semaphore.o,
+					   section .bss object data_init.o,
+					   section .bss object copy_init3.o,
+					   section .bss object board_init.o,
+					   section .bss object bsp_io.o,
+					   section .bss object bsp_delay.o,
+					   section .bss object bsp_register_protection.o,
+					   section .bss object bsp_reset.o,
+					   section .bss object pin_data.o,
+					   section .bss object r_ioport.o,
+					   section .bss object hal_data.o,
+					   section .bss object common_data.o,
+					   section .bss object r_cmtw.o,
+					   section .bss object r_qspi.o,
+					   section .bss object FreeRTOS_asm_vectors.o,
+					   section .bss object FreeRTOS_tick_config.o,
+					   section .bss object portASM.o,
+					   section .bss object rtos_rzt2_flash.o,
+					   section .bss object rtos_rzt2_qspi_flash.o,
+					   section .bss object r_ether_access_rzt2.o,
+					   section .bss object r_ether_phy_rzt2.o,
+					   section .bss object r_ether_rzt2.o,
+					   section .bss object r_ether_switch_rzt2.o,
+					   section .bss object r_ether_switch_rzt2_ext.o,
+					   section .bss object tasks.o,
+					   section .bss object timers.o,
+					   section .bss object queue.o,
+					   section .bss object list.o,
+					   section .bss object event_groups.o,
+					   section .bss object heap_5.o,
+					   section .bss object rtos_os.o,
+					   section .bss object eddp_llif.o,
+					   section .bss object delay_timer.o};
+                     
+initialize manually  { section .data object vector.o,
+					   section .data object vector_data.o,
+					   section .data object common_interrupt_handler.o,
+					   section .data object hal_entry.o,
+					   section .data object startup_ram.o,
+					   section .data object system.o,
+					   section .data object bsp_clocks.o,
+					   section .data object bsp_irq.o,
+					   section .data object bsp_semaphore.o,
+					   section .data object data_init.o,
+					   section .data object copy_init3.o,
+					   section .data object board_init.o,
+					   section .data object bsp_io.o,
+					   section .data object bsp_delay.o,
+					   section .data object bsp_register_protection.o,
+					   section .data object bsp_reset.o,
+					   section .data object pin_data.o,
+					   section .data object r_ioport.o,
+					   section .data object hal_data.o,
+					   section .data object common_data.o,
+					   section .data object r_cmtw.o,
+					   section .data object r_qspi.o,
+					   section .data object FreeRTOS_asm_vectors.o,
+					   section .data object FreeRTOS_tick_config.o,
+					   section .data object portASM.o,
+					   section .data object rtos_rzt2_flash.o,
+					   section .data object rtos_rzt2_qspi_flash.o,
+					   section .data object r_ether_access_rzt2.o,
+					   section .data object r_ether_phy_rzt2.o,
+					   section .data object r_ether_rzt2.o,
+					   section .data object r_ether_switch_rzt2.o,
+					   section .data object r_ether_switch_rzt2_ext.o,
+					   section .data object tasks.o,
+					   section .data object timers.o,
+					   section .data object queue.o,
+					   section .data object list.o,
+					   section .data object event_groups.o,
+					   section .data object heap_5.o,
+					   section .data object rtos_os.o,
+					   section .data object eddp_llif.o,
+					   section .data object delay_timer.o};
+
+					   
+place at address mem: __ICFEDIT_intvec_start__ {block VECTOR_RBLOCK};
+
+place in BSP_PRG_region  {  section BSP_PRG_RBLOCK,  block BSP_PRG_RBLOCK,
+							section BSP_DATA_RBLOCK, block BSP_DATA_RBLOCK};
+place in BSP_DAT_region  {section BSP_DATA_WBLOCK, block BSP_DATA_WBLOCK,  
+							section BSP_DATA_ZBLOCK, block BSP_DATA_ZBLOCK};
+							
+place in D_LDR_PRG_region  {section LDR_PRG_RBLOCK,  block LDR_PRG_RBLOCK,
+							section LDR_DATA_RBLOCK, block LDR_DATA_RBLOCK};
+							
+place in D_LDR_DATA_region {section LDR_DATA_WBLOCK, block LDR_DATA_WBLOCK, 
+							section LDR_DATA_ZBLOCK, block LDR_DATA_ZBLOCK};
+							
+place in BOOT_PRG_region {block BOOT_PRG_BLOCK};
+place in BOOT_PRM_region{block BOOT_PRM_BLOCK};
+
+place in SYS_STACK_region { block CSTACK, block SVC_STACK, block IRQ_STACK, block FIQ_STACK, block UND_STACK, block ABT_STACK };
+
+place in SRAM_CODE_region { readonly, section USER_PRG_RBLOCK, block USER_PRG_RBLOCK, section USER_DATA_RBLOCK, block USER_DATA_RBLOCK };
+
+// place in ATCM_region {section atcm, section tcm.rodata, section tcm.text };
+// place in BTCM_region {section btcm, section tcm.data};		
+place in SRAM_CODE_region {section atcm, section tcm.rodata, section tcm.text }; // Change the place from TCM to SRAM
+place in SRAM_DATA_region {section atcm, section tcm.rodata, section tcm.text }; // Change the place from TCM to SRAM
+				   
+place in SRAM_DATA_region  { readwrite };
+place in SRAM_DATA_region  { section USER_DATA_WBLOCK, block USER_DATA_WBLOCK};
+place in SDRAM_DATA_region { section USER_DATA_ZBLOCK, block USER_DATA_ZBLOCK };
+place in SDRAM_NC_region   { section nocache, section uncached_mem };
+ 
+place in K32_CODE_region{section k32_mem_code};
+place in K32_DATA_region{section k32_mem_data};
+
+ 
+place in HEAP_region { section heap, block HEAP};
+place in SRAM_CODE_region {};
+place in SRAM_DATA_region {section task_stack};
+place in SDRAM_DATA_region {};
+place in SDRAM_NC_region {};					
+
+// place in ATCM_region {section xtext_i_tcm  };
+// place in BTCM_region {section xdata_d_tcm, section bss_stack, section xdata_bss_dtcm };
+place in SRAM_CODE_region {section xtext_i_tcm  };												// Change the place from TCM to SRAM
+place in SRAM_DATA_region {section xdata_d_tcm, section bss_stack, section xdata_bss_dtcm };	// Change the place from TCM to SRAM
+
+place in SYSTEM_RAM_region { };
+place in PNIP_region{};
+place in SYSTEM_RAM_MIRROR_region { };
+place in XSPI0_MIRROR_region { };
+place in XSPI1_MIRROR_region { };
+place in CS0_MIRROR_region { };
+place in CS2_MIRROR_region { };
+place in CS3_MIRROR_region { };
+place in CS5_MIRROR_region { };
+place in XSPI0_region { };
+place in XSPI1_region { };
+place in CS0_region { };
+place in CS2_region { };
+place in CS3_region { };
+place in CS5_region { };
